@@ -17,4 +17,10 @@
         <PackageReference Include="MonoGame.Forms.DX" Version="3.2.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Content\content.mgcb">
+        <Generator>mgcb-editor</Generator>
+      </None>
+    </ItemGroup>
+
 </Project>

@@ -31,6 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             sampleControl = new Editor.Controls.SampleControl();
             panel1 = new System.Windows.Forms.Panel();
+            removeTexture = new System.Windows.Forms.Button();
+            addTexture = new System.Windows.Forms.Button();
+            texturesList = new System.Windows.Forms.ListBox();
+            label3 = new System.Windows.Forms.Label();
+            inputTextBox = new System.Windows.Forms.TextBox();
+            removeAnimationFrame = new System.Windows.Forms.Button();
+            addAnimationFrame = new System.Windows.Forms.Button();
+            animationFramesList = new System.Windows.Forms.ListBox();
+            label2 = new System.Windows.Forms.Label();
+            removeAnimation = new System.Windows.Forms.Button();
+            addAnimation = new System.Windows.Forms.Button();
+            animationsList = new System.Windows.Forms.ListBox();
             label1 = new System.Windows.Forms.Label();
             menuStrip1 = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +74,6 @@
             searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            listBox1 = new System.Windows.Forms.ListBox();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -75,26 +86,179 @@
             sampleControl.Location = new System.Drawing.Point(0, 28);
             sampleControl.MouseHoverUpdatesOnly = false;
             sampleControl.Name = "sampleControl";
-            sampleControl.Size = new System.Drawing.Size(929, 585);
+            sampleControl.Size = new System.Drawing.Size(1262, 725);
             sampleControl.TabIndex = 0;
             sampleControl.Text = "Sample Control";
             // 
             // panel1
             // 
+            panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
             panel1.AutoSize = true;
-            panel1.Controls.Add(listBox1);
+            panel1.Controls.Add(removeTexture);
+            panel1.Controls.Add(addTexture);
+            panel1.Controls.Add(texturesList);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(inputTextBox);
+            panel1.Controls.Add(removeAnimationFrame);
+            panel1.Controls.Add(addAnimationFrame);
+            panel1.Controls.Add(animationFramesList);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(removeAnimation);
+            panel1.Controls.Add(addAnimation);
+            panel1.Controls.Add(animationsList);
             panel1.Controls.Add(label1);
             panel1.Cursor = System.Windows.Forms.Cursors.Default;
-            panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             panel1.Location = new System.Drawing.Point(0, 28);
-            panel1.MaximumSize = new System.Drawing.Size(150, 0);
             panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(150, 585);
+            panel1.Size = new System.Drawing.Size(331, 731);
             panel1.TabIndex = 1;
+            // 
+            // removeTexture
+            // 
+            removeTexture.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            removeTexture.Location = new System.Drawing.Point(262, 530);
+            removeTexture.Margin = new System.Windows.Forms.Padding(0);
+            removeTexture.Name = "removeTexture";
+            removeTexture.Size = new System.Drawing.Size(32, 29);
+            removeTexture.TabIndex = 13;
+            removeTexture.Text = "-";
+            removeTexture.UseVisualStyleBackColor = true;
+            removeTexture.Click += removeTexture_Click;
+            // 
+            // addTexture
+            // 
+            addTexture.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            addTexture.Location = new System.Drawing.Point(297, 530);
+            addTexture.Margin = new System.Windows.Forms.Padding(0);
+            addTexture.Name = "addTexture";
+            addTexture.Size = new System.Drawing.Size(32, 29);
+            addTexture.TabIndex = 12;
+            addTexture.Text = "+";
+            addTexture.UseVisualStyleBackColor = true;
+            addTexture.Click += addTexture_Click;
+            // 
+            // texturesList
+            // 
+            texturesList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
+            texturesList.FormattingEnabled = true;
+            texturesList.ItemHeight = 20;
+            texturesList.Items.AddRange(new object[] { "Hay", "awwa" });
+            texturesList.Location = new System.Drawing.Point(0, 403);
+            texturesList.Name = "texturesList";
+            texturesList.Size = new System.Drawing.Size(331, 124);
+            texturesList.TabIndex = 11;
+            texturesList.SelectedIndexChanged += texturesList_SelectedIndexChange;
+            // 
+            // label3
+            // 
+            label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
+            label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label3.Location = new System.Drawing.Point(3, 377);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(293, 21);
+            label3.TabIndex = 10;
+            label3.Text = "Textures";
+            label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // inputTextBox
+            // 
+            inputTextBox.Location = new System.Drawing.Point(0, 698);
+            inputTextBox.Name = "inputTextBox";
+            inputTextBox.Size = new System.Drawing.Size(10, 27);
+            inputTextBox.TabIndex = 9;
+            inputTextBox.VisibleChanged += inputTextBox_VisibleChanged;
+            inputTextBox.KeyPress += inputTextBox_KeyPress;
+            inputTextBox.Leave += inputTextBox_FocusLeave;
+            // 
+            // removeAnimationFrame
+            // 
+            removeAnimationFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            removeAnimationFrame.Location = new System.Drawing.Point(262, 345);
+            removeAnimationFrame.Margin = new System.Windows.Forms.Padding(0);
+            removeAnimationFrame.Name = "removeAnimationFrame";
+            removeAnimationFrame.Size = new System.Drawing.Size(32, 29);
+            removeAnimationFrame.TabIndex = 8;
+            removeAnimationFrame.Text = "-";
+            removeAnimationFrame.UseVisualStyleBackColor = true;
+            removeAnimationFrame.Click += removeAnimationFrame_Click;
+            // 
+            // addAnimationFrame
+            // 
+            addAnimationFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            addAnimationFrame.Location = new System.Drawing.Point(297, 345);
+            addAnimationFrame.Margin = new System.Windows.Forms.Padding(0);
+            addAnimationFrame.Name = "addAnimationFrame";
+            addAnimationFrame.Size = new System.Drawing.Size(32, 29);
+            addAnimationFrame.TabIndex = 7;
+            addAnimationFrame.Text = "+";
+            addAnimationFrame.UseVisualStyleBackColor = true;
+            addAnimationFrame.Click += addAnimationFrame_Click;
+            // 
+            // animationFramesList
+            // 
+            animationFramesList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
+            animationFramesList.FormattingEnabled = true;
+            animationFramesList.ItemHeight = 20;
+            animationFramesList.Items.AddRange(new object[] { "Hay", "awwa" });
+            animationFramesList.Location = new System.Drawing.Point(0, 218);
+            animationFramesList.Name = "animationFramesList";
+            animationFramesList.Size = new System.Drawing.Size(331, 124);
+            animationFramesList.TabIndex = 6;
+            animationFramesList.SelectedIndexChanged += animationFramesList_SelectedIndexChanged;
+            animationFramesList.MouseDoubleClick += animationFramesList_MouseDoubleClick;
+            // 
+            // label2
+            // 
+            label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
+            label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label2.Location = new System.Drawing.Point(3, 192);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(293, 21);
+            label2.TabIndex = 5;
+            label2.Text = "Animation Frames";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // removeAnimation
+            // 
+            removeAnimation.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            removeAnimation.Location = new System.Drawing.Point(264, 163);
+            removeAnimation.Margin = new System.Windows.Forms.Padding(0);
+            removeAnimation.Name = "removeAnimation";
+            removeAnimation.Size = new System.Drawing.Size(32, 29);
+            removeAnimation.TabIndex = 4;
+            removeAnimation.Text = "-";
+            removeAnimation.UseVisualStyleBackColor = true;
+            removeAnimation.Click += removeAnimation_Click;
+            // 
+            // addAnimation
+            // 
+            addAnimation.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            addAnimation.Location = new System.Drawing.Point(299, 163);
+            addAnimation.Margin = new System.Windows.Forms.Padding(0);
+            addAnimation.Name = "addAnimation";
+            addAnimation.Size = new System.Drawing.Size(32, 29);
+            addAnimation.TabIndex = 3;
+            addAnimation.Text = "+";
+            addAnimation.UseVisualStyleBackColor = true;
+            addAnimation.Click += addAnimation_Click;
+            // 
+            // animationsList
+            // 
+            animationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
+            animationsList.FormattingEnabled = true;
+            animationsList.ItemHeight = 20;
+            animationsList.Items.AddRange(new object[] { "Hay", "awwa" });
+            animationsList.Location = new System.Drawing.Point(0, 36);
+            animationsList.Name = "animationsList";
+            animationsList.Size = new System.Drawing.Size(331, 124);
+            animationsList.TabIndex = 2;
+            animationsList.SelectedIndexChanged += animationsList_SelectedIndexChanged;
+            animationsList.MouseDoubleClick += animationsList_MouseDoubleClick;
             // 
             // label1
             // 
-            label1.Location = new System.Drawing.Point(0, 12);
+            label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label1.Location = new System.Drawing.Point(3, 12);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(97, 21);
             label1.TabIndex = 1;
@@ -106,7 +270,7 @@
             menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new System.Drawing.Size(929, 28);
+            menuStrip1.Size = new System.Drawing.Size(1262, 28);
             menuStrip1.TabIndex = 2;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -308,22 +472,11 @@
             aboutToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
             aboutToolStripMenuItem.Text = "&About...";
             // 
-            // listBox1
-            // 
-            listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 20;
-            listBox1.Items.AddRange(new object[] { "Hay", "awwa" });
-            listBox1.Location = new System.Drawing.Point(3, 36);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new System.Drawing.Size(143, 144);
-            listBox1.TabIndex = 2;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(929, 613);
+            ClientSize = new System.Drawing.Size(1262, 753);
             Controls.Add(panel1);
             Controls.Add(sampleControl);
             Controls.Add(menuStrip1);
@@ -332,13 +485,28 @@
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Form1";
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button removeTexture;
+        private System.Windows.Forms.Button addTexture;
+        private System.Windows.Forms.ListBox texturesList;
+        private System.Windows.Forms.Label label3;
+
+        private System.Windows.Forms.TextBox inputTextBox;
+
+        private System.Windows.Forms.Button addAnimation;
+        private System.Windows.Forms.Button removeAnimation;
+        private System.Windows.Forms.Button removeAnimationFrame;
+        private System.Windows.Forms.Button addAnimationFrame;
+        private System.Windows.Forms.ListBox animationFramesList;
+        private System.Windows.Forms.Label label2;
+
+        private System.Windows.Forms.ListBox animationsList;
 
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
