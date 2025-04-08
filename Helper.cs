@@ -33,10 +33,10 @@ public static class Helper
         spriteBatch.Draw(PointTexture,
             new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
         spriteBatch.Draw(PointTexture, 
-            new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
+            new Rectangle(rectangle.X + 1, rectangle.Y, rectangle.Width + lineWidth - 1, lineWidth), color);
         spriteBatch.Draw(PointTexture, 
-            new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
+            new Rectangle(rectangle.X + rectangle.Width, rectangle.Y + 1, lineWidth, rectangle.Height + lineWidth - 1), color);
         spriteBatch.Draw(PointTexture, 
-            new Rectangle(rectangle.X, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth), color);
+            new Rectangle(rectangle.X + 1, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth - 1, lineWidth), color);
     }
 }

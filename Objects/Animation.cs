@@ -2,6 +2,7 @@
 
 public class Animation
 {
+    public static readonly string SpriteOnlyAnimationName = "<Only Sprites>";
     private string _name = "New Animation";
     private List<AnimationFrame> frames = new List<AnimationFrame>();
 

@@ -2,22 +2,27 @@ using System.ComponentModel;
 using Editor.Controls;
 using Microsoft.Xna.Framework.Graphics;
 using WinFormsApp1.Data;
+using WinFormsApp1.Parsers;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
         private OpenFileDialog openFileDialog;
+        private SaveFileDialog saveFileDialog;
 
         private const int INPUT_TEXT_ANIMATION = 1;
         private const int INPUT_TEXT_FRAME = 2;
         private int inputTextIndex = 0;
+
+        private string filePath = String.Empty;
+        private string rootPath = String.Empty;
         
         public Form1()
         {
             
             openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "*.png|*.png";
+            openFileDialog.Filter = "*.txt|*.txt";
             
             InitializeComponent();
             var animationsBinding = new BindingList<Animation>(sampleControl.Animations);
@@ -37,7 +42,30 @@ namespace WinFormsApp1
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                TextParser.TextParseLoadResult? resultNull = TextParser.Load(openFileDialog.FileName, new EditorSetting());
+                if (resultNull == null)
+                {
+                    return;
+                }
+                var result = (TextParser.TextParseLoadResult)resultNull;
+                sampleControl.SetLoad(result);
+                filePath = result.Path;
+                rootPath = result.RootPath;
+                
+                if (sampleControl.Animations.Count > 0)
+                {
+                    var animationFramesBinding = new BindingList<AnimationFrame>(sampleControl.Animations[0].Frames);
+                    animationFramesList.DataSource = animationFramesBinding;
+                    animationFramesList.DisplayMember = "Name";
+                }
+                
+                (texturesList.DataSource as BindingList<Tuple<string, Texture2D>>).ResetBindings();
+                (animationsList.DataSource as BindingList<Animation>).ResetBindings();
+                (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
+                
+            }
         }
 
         #region  Animation
@@ -45,9 +73,15 @@ namespace WinFormsApp1
         private void addAnimation_Click(object sender, EventArgs e)
         {
             if (texturesList.SelectedIndex < 0 || texturesList.SelectedIndex > sampleControl.Textures.Count - 1) return;
+            
             (animationsList.DataSource as BindingList<Animation>)?.Add(new Animation());
             animationsList.SelectedIndex = (animationsList.DataSource as BindingList<Animation>).Count - 1;
             sampleControl.SelectedAnimationIndex = animationsList.SelectedIndex;
+                
+                
+            var animationFramesBinding = new BindingList<AnimationFrame>(sampleControl.Animations[sampleControl.SelectedAnimationIndex].Frames);
+            animationFramesList.DataSource = animationFramesBinding;
+            animationFramesList.DisplayMember = "Name";
         }
 
         private void removeAnimation_Click(object sender, EventArgs e)
@@ -79,8 +113,8 @@ namespace WinFormsApp1
         
         private void addAnimationFrame_Click(object sender, EventArgs e)
         {
-            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > sampleControl.Animations.Count - 1) return;
             sampleControl.AddNewFrame();
+            (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
             
             animationFramesList.SelectedIndex = (animationFramesList.DataSource as BindingList<AnimationFrame>).Count - 1;
             sampleControl.SelectedFrameIndex = animationFramesList.SelectedIndex;
@@ -170,5 +204,17 @@ namespace WinFormsApp1
         }
         #endregion
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (filePath.Trim() == "") return;
+            TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
+            param.FileName = filePath;
+            param.RootPath = rootPath;
+            param.EditorSetting = new EditorSetting();
+            param.Animations = sampleControl.Animations;
+            param.Textures = sampleControl.Textures;
+            param.TextureIds = sampleControl.TextureIds;
+            TextParser.Save(param);
+        }
     }
 }

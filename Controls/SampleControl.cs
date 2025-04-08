@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Forms.NET.Controls;
 using WinFormsApp1;
 using WinFormsApp1.Data;
+using WinFormsApp1.Parsers;
 using Color = Microsoft.Xna.Framework.Color;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = Microsoft.Xna.Framework.Point;
@@ -17,7 +18,7 @@ namespace Editor.Controls
     public class SampleControl : MonoGameControl
     {
         // Fields & Properties here!
-        private const string WelcomeMessage = "Welcome to MonoGame.Forms!";
+        private const string WelcomeMessage = "Add an image to create Animation";
 
         private static readonly Point cameraClamp = new Point(100, 100);
 
@@ -42,6 +43,7 @@ namespace Editor.Controls
         
         public List<Animation> Animations => _animations;
         public List<Tuple<string, Texture2D>> Textures => _textures;
+        public Dictionary<string, int> TextureIds => _textureIds;
 
         #region Setters
 
@@ -55,7 +57,7 @@ namespace Editor.Controls
                 FileStream fs = new FileStream(path, FileMode.Open);
                 _texture = Texture2D.FromStream(Editor.GraphicsDevice, fs);
                 
-                _textures.Add(new Tuple<string, Texture2D>(path.Split('\\').Last(), _texture));
+                _textures.Add(new Tuple<string, Texture2D>(path, _texture));
                 _textureIds.Add(path, textureId++);
             }
             catch (Exception e)
@@ -91,10 +93,31 @@ namespace Editor.Controls
         #endregion
 
         #endregion
+
+        public void SetLoad(TextParser.TextParseLoadResult result)
+        {
+            _animations = result.Animations;
+            foreach (var texture in result.TextureIds)
+                LoadTexture(Path.Combine(result.RootPath, texture.Key.Replace('/',  '\\')));
+            
+        }
         
         private Vector2 screenCenter
         {
             get => new Vector2(Editor.GraphicsDevice.Viewport.Width / 2, Editor.GraphicsDevice.Viewport.Height / 2);
+        }
+
+        public void NewAnimationList()
+        {
+            _animations.Clear();
+            Animation defaultAnimation = new Animation();
+            defaultAnimation.SetName(Animation.SpriteOnlyAnimationName);
+            _animations.Add(defaultAnimation);
+        }
+        
+        public SampleControl()
+        {
+            NewAnimationList();
         }
         
         protected override void Initialize()
@@ -105,6 +128,7 @@ namespace Editor.Controls
             // Initialization & Content-Loading here!
 
             SetMultiSampleCount(8);
+            Editor.Camera.Zoom(1.5f);
         }
 
         protected override void Update(GameTime gameTime)
@@ -172,14 +196,18 @@ namespace Editor.Controls
                 for (int i = 0; i < anim.Frames.Count; i++)
                 {
                     if (anim.Frames[i].TextureId != selectedTextureIndex) continue;
+                    Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
+                    Rectangle rect = anim.Frames[i].Rect;
+                    rect.X += texturePosition.X;
+                    rect.Y += texturePosition.Y;
                     if (i == SelectedFrameIndex)  
-                        Helper.DrawRectangle(Editor.spriteBatch, anim.Frames[i].Rect, new Color(Color.Red, 0.4f), 1);
+                        Helper.DrawRectangle(Editor.spriteBatch, rect, new Color(Color.Red, 0.4f), 1);
                     else   
-                        Helper.DrawRectangle(Editor.spriteBatch, anim.Frames[i].Rect, new Color(Color.Blue, 0.4f), 1);
+                        Helper.DrawRectangle(Editor.spriteBatch, rect, new Color(Color.Blue, 0.4f), 1);
                 }
             }
             Editor.spriteBatch.Draw(Helper.PointTexture, 
-                new Rectangle(Helper.ScreenToWorld(Mouse.GetState().Position, Editor.Camera).ToPoint(), new Point(2)), 
+                new Rectangle(Helper.ScreenToWorld(Mouse.GetState().Position, Editor.Camera).ToPoint(), new Point(1)), 
                 Color.Red);
             
             //Editor.spriteBatch.End();
@@ -246,6 +274,9 @@ namespace Editor.Controls
                     spriteRect.Width > 1 &&
                     spriteRect.Height > 1)
                 {
+                    Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
+                    spriteRect.X -= texturePosition.X;
+                    spriteRect.Y -= texturePosition.Y;
                     _animations[SelectedAnimationIndex].Frames[SelectedFrameIndex].SetRect(spriteRect);
                 }
                 spriteRect = Rectangle.Empty;
