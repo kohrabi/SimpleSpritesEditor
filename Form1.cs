@@ -17,12 +17,18 @@ namespace WinFormsApp1
 
         private string filePath = String.Empty;
         private string rootPath = String.Empty;
+        private int startId = 0;
         
         public Form1()
         {
             
             openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "*.txt|*.txt";
+
+            saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = ".h";
+            saveFileDialog.Filter = "*.h|*.h";
+            saveFileDialog.FileName = "ObjectName";
             
             InitializeComponent();
             var animationsBinding = new BindingList<Animation>(sampleControl.Animations);
@@ -101,8 +107,10 @@ namespace WinFormsApp1
 
         private void animationsList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (animationsList.SelectedItem == null || animationsList.SelectedIndex == 0) return;
             inputTextBox.Show();
             inputTextIndex = INPUT_TEXT_ANIMATION;
+            inputTextBox.Text = (animationsList.SelectedItem as Animation).Name;
             inputTextBox.Location = new Point(animationsList.Location.X, animationsList.Location.Y + animationsList.SelectedIndex * animationsList.ItemHeight);
             inputTextBox.Size = new Size(animationsList.Width - (animationsList.Padding.Horizontal) - 5, animationsList.ItemHeight);
         }
@@ -136,8 +144,11 @@ namespace WinFormsApp1
         
         private void animationFramesList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (animationFramesList.SelectedItem == null) return;
+            
             inputTextBox.Show();
             inputTextIndex = INPUT_TEXT_FRAME;
+            inputTextBox.Text = (animationFramesList.SelectedItem as AnimationFrame).Name;
             inputTextBox.Location = new Point(animationFramesList.Location.X, animationFramesList.Location.Y + animationFramesList.SelectedIndex * animationFramesList.ItemHeight);
             inputTextBox.Size = new Size(animationFramesList.Width - (animationFramesList.Padding.Horizontal) - 5, animationFramesList.ItemHeight);
         }
@@ -169,7 +180,6 @@ namespace WinFormsApp1
         
         #endregion
         
-        
         #region Input Text Box
         
         private void inputTextBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -199,8 +209,6 @@ namespace WinFormsApp1
         
         private void inputTextBox_VisibleChanged(object sender, EventArgs e)
         {
-            if (inputTextBox.Visible)
-                inputTextBox.Text = "";
         }
         #endregion
 
@@ -215,6 +223,20 @@ namespace WinFormsApp1
             param.Textures = sampleControl.Textures;
             param.TextureIds = sampleControl.TextureIds;
             TextParser.Save(param);
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() ==  DialogResult.OK)
+            {
+                HeaderExport.HeaderExportParams param = new HeaderExport.HeaderExportParams();
+                param.FilePath = saveFileDialog.FileName;
+                param.StartId = startId;
+                param.Animations = sampleControl.Animations;
+                param.TextureIds = sampleControl.TextureIds;
+                param.ObjectName = "Koopa";
+                HeaderExport.Export(param);
+            }
         }
     }
 }

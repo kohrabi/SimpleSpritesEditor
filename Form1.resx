@@ -102,34 +102,6 @@
         QmCC
 </value>
   </data>
-  <data name="printToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAFfSURBVFhH7ZZLboMwFEVZQpfQJXQNzNlEOmcNnTBn2CBW
-        wRrSAftoMsWV+AyprsWzHMdxAtikTv2kM8Cfd48MEo5M1XXdR9/3o0uQMcXNL68Ey7K0inXBOI6t8n8F
-        i6IYWfOzCOwNgkFwTgXBIDiTIOhKcBiG16ZpXqZYfWHBJMRos4wrQQUGhwvZtm3fMKksPmMjQYLBicvB
-        FgPygqqqLq5H1DhNUx60BOylPmp/UNf1mSQ/Sfk7g1iSJKLJI8iyTEjCLYIpDTxajpBOkkGQP+D0aMFu
-        9z4ev0/a78gFyEIm5eN1k5cQzPNcLNhSjkCmURCDtIA2HQ5f4/5zz5GbuWK2IMTUMZdQ1vMIbs1zC+r+
-        DGvQZawSpDlbmDL8FzRx7fXcA/bqeqr4KYgfNCauQZttCeoyCPnaJQRvYVtQl6Hj7wuaSr7MUmNbUF9+
-        KV1aXgnqPuY1WBd0heeCUfQLe5ZEZWEi4q8AAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="printPreviewToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAJbSURBVFhH7Za7SgNBFIZ9AvEJxBfwEWxS29kqCCksrKxt
-        bNJYqK2SRhBSKZJKiYSIoKZQBAULhQhBbIQkm1s57j/krOPkxJndmY2CDnyyc/88c8lMfJe63e5Gr9cT
-        KXDXaDSmBtMkTykKAndJVTCfz3uhXC77k1QFM5mMN4rFoh/JtASBF0lO8OnpWTQbrVhQ32w2G30DZ0nf
-        gpXKuSiVzqI8cJL0LXh5eSXz3iTTEgReJNMUBM6SaQsCk+RAhU/jEAS6pHqZD1T45Ftwe2tbSurgdKtX
-        EH5xfkTQln/BpPwNwfv7B3ZwHzgJFgoFUavVoo5Ep9MRrWbAThgXJ0ETEOUmjUMswX6/PxM2aFLDk5ua
-        mM+diImFfMT0SkGsH1TF23szGpCb2JZYgmFEKtRode/ii5gORK8fX2Vbl0haC4bRW6YGm0e3QzJz60WJ
-        Xk6RTLonrQXDimNUYsLJpf1IAstJHQGiNrt2OFSfNIpxBGWlGj3sPypXgSS1QRSpnBMwEVsQEaHJcUio
-        XEddbirjBExYCQ5Or6xc3Cn/PkEkqlQjuHv6EHXSwdKOTRDP7CAIXlCp7i8cFvW+I9R/ApGkck7AhFEQ
-        cmHhHVWqgiSJSGK5uYubtkE7aLMCJr4V5OTUK8YELnPqy01uw0hBFzm0w3VEfV0eDqygjRzyKAfYcwTE
-        1H0ZtJItLcEKhn+s5KjNKHw8uUYJyg8bObwJ6/W6CMJD0G535GHw9RYEsQR1uVwuFw2QNsYl1uUAN1Ba
-        GA+JLgfQaVxUq5+vJvaa+U1IQSRGEt87Sv4H6IkPAX08Fnxm3KEAAAAASUVORK5CYII=
-</value>
-  </data>
   <data name="cutToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

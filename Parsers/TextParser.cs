@@ -16,7 +16,7 @@ public static class TextParser
     {
         public string RootPath;
         public string FileName;
-        public int StartID = 0;
+        public int StartId = 0;
         public List<Animation> Animations;
         public List<Tuple<string, Texture2D>> Textures;
         public Dictionary<string, int> TextureIds; // Texture Id mapping
@@ -36,6 +36,7 @@ public static class TextParser
     {
         public string RootPath;
         public string Path;
+        public int StartId = 0;
         public Dictionary<string, int> TextureIds; // Texture Id mapping
         public List<Animation> Animations;
         public List<AnimationFrame> Frames;
@@ -58,22 +59,24 @@ public static class TextParser
         {
             streamWriter.WriteLine("# EDITOR ");
             streamWriter.WriteLine("# EDITOR rootPath " + param.RootPath);
+            streamWriter.WriteLine("# EDITOR startID " + param.StartId);
+            streamWriter.WriteLine();
             
             streamWriter.WriteLine(TEXTURES_PREFIX);
             foreach (var texture in param.Textures)
             {
                 string path = texture.Item1.Remove(0, param.RootPath.Length);
-                streamWriter.WriteLine(path + param.EditorSetting.Delimeter + texture.Item2);
+                streamWriter.WriteLine(path + param.EditorSetting.Delimeter + param.TextureIds[texture.Item1]);
             }
             streamWriter.WriteLine();
             
             streamWriter.WriteLine(SPRITES_PREFIX);
-            int id = 0;
+            int id = param.StartId;
             foreach (var animation in param.Animations)
             {
                 foreach (var frame in animation.Frames)
                 {
-                    streamWriter.WriteLine((param.StartID + id) + param.EditorSetting.Delimeter + 
+                    streamWriter.WriteLine(id + param.EditorSetting.Delimeter + 
                                            frame.Rect.Left + param.EditorSetting.Delimeter +
                                            frame.Rect.Top + param.EditorSetting.Delimeter +
                                            frame.Rect.Right + param.EditorSetting.Delimeter +
@@ -202,6 +205,8 @@ public static class TextParser
                             string[] tokens = line.Split(' ');
                             if (tokens[0] == "rootPath")
                                 result.RootPath = tokens[1];
+                            if (tokens[0] == "startId")
+                                result.StartId = int.Parse(tokens[1]);
                         }
                             break;
                     }
@@ -213,7 +218,10 @@ public static class TextParser
                 {
                     Animation anim = new Animation();
                     anim.SetName(Animation.SpriteOnlyAnimationName);
-                    anim.Frames.AddRange(frames.Values.ToList());
+                    foreach (var frame in frames)
+                    {
+                        anim.AddFrame(frame.Value);
+                    }
                     result.Animations.Insert(0, anim);
                 }
 
