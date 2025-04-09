@@ -25,7 +25,8 @@ public class Animation : INotifyPropertyChanged
 
     public void AddFrame(AnimationFrame frame)
     {
-        frame.SetName("Frame " + frames.Count);
+        if (frame.Name == "New Frame")
+            frame.SetName("Frame " + frames.Count);
         frames.Add(frame);
         NotifyPropertyChanged(nameof(Frames));
     }

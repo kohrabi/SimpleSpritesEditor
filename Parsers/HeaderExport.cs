@@ -1,4 +1,5 @@
-﻿using WinFormsApp1.Objects;
+﻿using SharpDX.Direct3D9;
+using WinFormsApp1.Objects;
 
 namespace WinFormsApp1.Parsers;
 
@@ -8,6 +9,8 @@ public static class HeaderExport
     public struct HeaderExportParams
     {
         public string FilePath;
+        public string ContentFilePath;
+        public string RootPath;
         public string ObjectName;
         public int StartId = 0;
         public List<Animation> Animations;
@@ -16,6 +19,8 @@ public static class HeaderExport
         public HeaderExportParams()
         {
             FilePath = null;
+            RootPath = null;
+            ContentFilePath = null;
             ObjectName = null;
             Animations = null;
             TextureIds = null;
@@ -33,14 +38,18 @@ public static class HeaderExport
             
             streamWriter.WriteLine("#define " + param.ObjectName.ToUpper() + "_ID " + param.StartId);
             streamWriter.WriteLine();
-            
+
+            streamWriter.WriteLine("#define " + param.ObjectName.ToUpper() + 
+                "_SPRITES_PATH " + "L\"" + param.ContentFilePath.Remove(0, param.RootPath.Length) + "\"");
+            streamWriter.WriteLine();
+
             int id = param.StartId + 1;
             foreach (var animation in param.Animations)
             {
                 int frameIndex = 0;
                 foreach (var frame in animation.Frames)
                 {
-                    string outputSprites = "#define " + param.ObjectName.ToUpper() + "_ID_SPRITES_";
+                    string outputSprites = "#define " + param.ObjectName.ToUpper() + "_ID_SPRITE_";
                     if (animation.Name != Animation.SpriteOnlyAnimationName)
                         outputSprites += animation.Name.ToUpper() + "_FRAME_" + frameIndex;
                     else
@@ -60,7 +69,7 @@ public static class HeaderExport
                 if (animation.Name == Animation.SpriteOnlyAnimationName)
                     continue;
                 string outputAnimation = "#define " + param.ObjectName.ToUpper() + "_ID_ANIMATION_";
-                outputAnimation += animation.Name.ToUpper();
+                outputAnimation += animation.Name.ToUpper().Replace(" ", "_");
                 outputAnimation += " " + id;
                 streamWriter.WriteLine(outputAnimation);
             }

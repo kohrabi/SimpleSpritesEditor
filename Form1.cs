@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Editor.Controls;
+using Editor.Objects;
 using Microsoft.Xna.Framework.Graphics;
 using WinFormsApp1.Objects;
 using WinFormsApp1.Parsers;
@@ -11,13 +12,14 @@ namespace WinFormsApp1
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
 
+        private EditorSetting editorSetting = new EditorSetting();
+
         private const int INPUT_TEXT_ANIMATION = 1;
         private const int INPUT_TEXT_FRAME = 2;
         private int inputTextIndex = 0;
 
         private string filePath = String.Empty;
         private string rootPath = String.Empty;
-        private int startId = 0;
 
         public Form1()
         {
@@ -203,31 +205,30 @@ namespace WinFormsApp1
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (filePath.Trim() == "") return;
+            TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
+            param.RootPath = rootPath;
+            param.EditorSetting = editorSetting;
+            param.StartId = editorSetting.StartID;
+            param.Animations = sampleControl.Animations.ToList();
+            param.Textures = sampleControl.Textures.ToList();
+            param.TextureIds = sampleControl.TextureIds;
             if (filePath == "")
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
                     param.FileName = saveFileDialog.FileName;
-                    param.RootPath = rootPath;
-                    param.EditorSetting = new EditorSetting();
-                    param.Animations = sampleControl.Animations.ToList();
-                    param.Textures = sampleControl.Textures.ToList();
-                    param.TextureIds = sampleControl.TextureIds;
-                    TextParser.Save(param);
+                }
+                if (param.FileName == "")
+                {
+                    MessageBox.Show("ERROR", "Something went wrong when openning file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             else
             {
-                TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
                 param.FileName = filePath;
-                param.RootPath = rootPath;
-                param.EditorSetting = new EditorSetting();
-                param.Animations = sampleControl.Animations.ToList();
-                param.Textures = sampleControl.Textures.ToList();
-                param.TextureIds = sampleControl.TextureIds;
-                TextParser.Save(param);
             }
+            TextParser.Save(param);
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -239,7 +240,9 @@ namespace WinFormsApp1
             {
                 HeaderExport.HeaderExportParams param = new HeaderExport.HeaderExportParams();
                 param.FilePath = saveFileDialog.FileName;
-                param.StartId = startId;
+                param.RootPath = rootPath;
+                param.ContentFilePath = filePath;
+                param.StartId = editorSetting.StartID;
                 param.Animations = sampleControl.Animations.ToList();
                 param.TextureIds = sampleControl.TextureIds;
                 param.ObjectName = "Koopa";
@@ -252,6 +255,11 @@ namespace WinFormsApp1
             sampleControl.Animations.ResetBindings();
             sampleControl.Textures.ResetBindings();
             (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
+        }
+
+        private void panel2_Click(object sender, EventArgs e)
+        {
+            propertyGrid1.SelectedObject = editorSetting;
         }
     }
 }
