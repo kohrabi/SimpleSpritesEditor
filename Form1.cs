@@ -18,8 +18,6 @@ namespace WinFormsApp1
         private const int INPUT_TEXT_FRAME = 2;
         private int inputTextIndex = 0;
 
-        private string filePath = String.Empty;
-        private string rootPath = String.Empty;
 
         public Form1()
         {
@@ -37,7 +35,9 @@ namespace WinFormsApp1
             animationFramesList.DisplayMember = "Name";
 
             texturesList.DataSource = mainControl.Textures;
-            texturesList.DisplayMember = "Item1";
+            texturesList.DisplayMember = "FilePath";
+
+            animationControl.MainControl = mainControl;
 
             inputTextBox.Hide();
         }
@@ -47,15 +47,19 @@ namespace WinFormsApp1
             openFileDialog.Filter = "*.txt|*.txt";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                TextParser.TextParseLoadResult? resultNull = TextParser.Load(openFileDialog.FileName, new EditorSetting());
+                TextParser.TextParseLoadResult? resultNull = TextParser.Load(openFileDialog.FileName, editorSetting);
                 if (resultNull == null)
                 {
                     return;
                 }
                 var result = (TextParser.TextParseLoadResult)resultNull;
                 mainControl.SetLoad(result);
-                filePath = result.Path;
-                rootPath = result.RootPath;
+                editorSetting.FilePath = result.Path;
+                if (result.RootPath != "")
+                    editorSetting.RootPath = result.RootPath;
+                else
+                    editorSetting.RootPath = Path.GetDirectoryName(result.Path);
+                    
 
                 if (mainControl.Animations.Count > 0)
                 {
@@ -65,7 +69,7 @@ namespace WinFormsApp1
                 }
 
                 animationsList.DataSource = mainControl.Animations;
-                texturesList.DataSource = new BindingList<Tuple<string, Texture2D>>(mainControl.Textures);
+                texturesList.DataSource = new BindingList<AnimationTexture>(mainControl.Textures);
                 (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
 
             }
@@ -100,6 +104,8 @@ namespace WinFormsApp1
 
             animationFramesList.DataSource = mainControl.Animations[mainControl.SelectedAnimationIndex].Frames;
             animationFramesList.DisplayMember = "Name";
+
+            animationControl.SelectAnimation();
 
         }
 
@@ -152,7 +158,7 @@ namespace WinFormsApp1
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 mainControl.LoadTexture(openFileDialog.FileName);
-                (texturesList.DataSource as BindingList<Tuple<string, Texture2D>>).ResetBindings();
+                (texturesList.DataSource as BindingList<AnimationTexture>).ResetBindings();
             }
         }
 
@@ -160,7 +166,7 @@ namespace WinFormsApp1
         {
             if (texturesList.SelectedIndex < 0 || texturesList.SelectedIndex > texturesList.Items.Count - 1) return;
             mainControl.UnloadTexture(texturesList.SelectedIndex);
-            (texturesList.DataSource as BindingList<Tuple<string, Texture2D>>).ResetBindings();
+            (texturesList.DataSource as BindingList<AnimationTexture>).ResetBindings();
         }
 
         private void texturesList_SelectedIndexChange(object sender, EventArgs e)
@@ -204,15 +210,15 @@ namespace WinFormsApp1
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (filePath.Trim() == "") return;
+            if (editorSetting.FilePath.Trim() == "") return;
             TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
-            param.RootPath = rootPath;
+            param.RootPath = editorSetting.RootPath;
             param.EditorSetting = editorSetting;
             param.StartId = editorSetting.StartID;
+            param.TextureIds = mainControl.TextureIds;
             param.Animations = mainControl.Animations.ToList();
             param.Textures = mainControl.Textures.ToList();
-            param.TextureIds = mainControl.TextureIds;
-            if (filePath == "")
+            if (editorSetting.FilePath == "")
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -226,7 +232,7 @@ namespace WinFormsApp1
             }
             else
             {
-                param.FileName = filePath;
+                param.FileName = editorSetting.FilePath;
             }
             TextParser.Save(param);
         }
@@ -240,11 +246,10 @@ namespace WinFormsApp1
             {
                 HeaderExport.HeaderExportParams param = new HeaderExport.HeaderExportParams();
                 param.FilePath = saveFileDialog.FileName;
-                param.RootPath = rootPath;
-                param.ContentFilePath = filePath;
+                param.RootPath = editorSetting.RootPath;
+                param.ContentFilePath = editorSetting.FilePath;
                 param.StartId = editorSetting.StartID;
                 param.Animations = mainControl.Animations.ToList();
-                param.TextureIds = mainControl.TextureIds;
                 param.ObjectName = "Koopa";
                 HeaderExport.Export(param);
             }
@@ -257,7 +262,7 @@ namespace WinFormsApp1
             (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
         }
 
-        private void panel2_Click(object sender, EventArgs e)
+        private void panel1_Click(object sender, EventArgs e)
         {
             propertyGrid1.SelectedObject = editorSetting;
         }

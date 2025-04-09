@@ -2,6 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 public class AnimationFrame : INotifyPropertyChanged
@@ -9,6 +10,7 @@ public class AnimationFrame : INotifyPropertyChanged
     public int Id = 0;
     private string _name = "New Frame";
     private Rectangle _rect = Rectangle.Empty;
+    private string _texturePath = "";
     private int _textureId;
     private int _frameTime = 10;
 
@@ -57,6 +59,7 @@ public class AnimationFrame : INotifyPropertyChanged
     }
 
     public int TextureId => _textureId;
+    public string TexturePath => _texturePath;
     public int FrameTime
     {
         get => _frameTime;
@@ -67,11 +70,16 @@ public class AnimationFrame : INotifyPropertyChanged
         }
     }
 
+    public AnimationFrame(int textureId, string texturePath)
+    {
+        _textureId = textureId;
+        _texturePath = texturePath;
+    }
     public AnimationFrame(int textureId)
     {
         _textureId = textureId;
     }
-    
+
     public void SetName(string name)
     {
         _name = name;
@@ -94,5 +102,12 @@ public class AnimationFrame : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public void SetTexture(int textureId, string texturePath)
+    {
+        _textureId = textureId;
+        _texturePath = texturePath;
+    }
+
 }
 

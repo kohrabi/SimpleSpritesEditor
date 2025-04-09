@@ -58,7 +58,8 @@
             searchToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            panel2 = new Panel();
+            splitContainer1 = new SplitContainer();
+            splitContainer3 = new SplitContainer();
             panel1 = new Panel();
             removeTexture = new Button();
             addTexture = new Button();
@@ -74,17 +75,19 @@
             animationsList = new ListBox();
             label1 = new Label();
             propertyGrid1 = new PropertyGrid();
-            splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             mainControl = new Editor.Controls.MainControl();
             animationControl = new Editor.Controls.AnimationControl();
             menuStrip1.SuspendLayout();
-            panel2.SuspendLayout();
-            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer3).BeginInit();
+            splitContainer3.Panel1.SuspendLayout();
+            splitContainer3.Panel2.SuspendLayout();
+            splitContainer3.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.Panel2.SuspendLayout();
@@ -293,24 +296,43 @@
             aboutToolStripMenuItem.Size = new Size(150, 26);
             aboutToolStripMenuItem.Text = "&About...";
             // 
-            // panel2
+            // splitContainer1
             // 
-            panel2.AutoSize = true;
-            panel2.BackColor = SystemColors.ButtonFace;
-            panel2.BorderStyle = BorderStyle.FixedSingle;
-            panel2.Controls.Add(panel1);
-            panel2.Controls.Add(propertyGrid1);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 0);
-            panel2.MinimumSize = new Size(261, 725);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(323, 725);
-            panel2.TabIndex = 4;
-            panel2.Click += panel2_Click;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 28);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(splitContainer3);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
+            splitContainer1.Size = new Size(1262, 725);
+            splitContainer1.SplitterDistance = 327;
+            splitContainer1.TabIndex = 5;
+            // 
+            // splitContainer3
+            // 
+            splitContainer3.Dock = DockStyle.Fill;
+            splitContainer3.Location = new Point(0, 0);
+            splitContainer3.Name = "splitContainer3";
+            splitContainer3.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            splitContainer3.Panel1.Controls.Add(panel1);
+            // 
+            // splitContainer3.Panel2
+            // 
+            splitContainer3.Panel2.Controls.Add(propertyGrid1);
+            splitContainer3.Size = new Size(327, 725);
+            splitContainer3.SplitterDistance = 482;
+            splitContainer3.TabIndex = 4;
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.AutoScroll = true;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(removeTexture);
@@ -326,15 +348,17 @@
             panel1.Controls.Add(addAnimation);
             panel1.Controls.Add(animationsList);
             panel1.Controls.Add(label1);
+            panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(318, 428);
+            panel1.Size = new Size(327, 482);
             panel1.TabIndex = 1;
+            panel1.Click += panel1_Click;
             // 
             // removeTexture
             // 
             removeTexture.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            removeTexture.Location = new Point(228, 408);
+            removeTexture.Location = new Point(237, 408);
             removeTexture.Margin = new Padding(0);
             removeTexture.Name = "removeTexture";
             removeTexture.Size = new Size(32, 29);
@@ -346,7 +370,7 @@
             // addTexture
             // 
             addTexture.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addTexture.Location = new Point(260, 408);
+            addTexture.Location = new Point(269, 408);
             addTexture.Margin = new Padding(0);
             addTexture.Name = "addTexture";
             addTexture.Size = new Size(32, 29);
@@ -363,7 +387,7 @@
             texturesList.Items.AddRange(new object[] { "Hay", "awwa" });
             texturesList.Location = new Point(0, 321);
             texturesList.Name = "texturesList";
-            texturesList.Size = new Size(292, 84);
+            texturesList.Size = new Size(301, 84);
             texturesList.TabIndex = 11;
             texturesList.SelectedIndexChanged += texturesList_SelectedIndexChange;
             // 
@@ -373,7 +397,7 @@
             label3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label3.Location = new Point(3, 295);
             label3.Name = "label3";
-            label3.Size = new Size(247, 21);
+            label3.Size = new Size(192, 21);
             label3.TabIndex = 10;
             label3.Text = "Textures";
             label3.TextAlign = ContentAlignment.MiddleLeft;
@@ -391,7 +415,7 @@
             // removeAnimationFrame
             // 
             removeAnimationFrame.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            removeAnimationFrame.Location = new Point(228, 261);
+            removeAnimationFrame.Location = new Point(237, 263);
             removeAnimationFrame.Margin = new Padding(0);
             removeAnimationFrame.Name = "removeAnimationFrame";
             removeAnimationFrame.Size = new Size(32, 29);
@@ -403,7 +427,7 @@
             // addAnimationFrame
             // 
             addAnimationFrame.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addAnimationFrame.Location = new Point(260, 261);
+            addAnimationFrame.Location = new Point(269, 263);
             addAnimationFrame.Margin = new Padding(0);
             addAnimationFrame.Name = "addAnimationFrame";
             addAnimationFrame.Size = new Size(32, 29);
@@ -420,7 +444,7 @@
             animationFramesList.Items.AddRange(new object[] { "Hay", "awwa" });
             animationFramesList.Location = new Point(0, 176);
             animationFramesList.Name = "animationFramesList";
-            animationFramesList.Size = new Size(292, 84);
+            animationFramesList.Size = new Size(301, 84);
             animationFramesList.TabIndex = 6;
             animationFramesList.SelectedIndexChanged += animationFramesList_SelectedIndexChanged;
             animationFramesList.MouseDoubleClick += animationFramesList_MouseDoubleClick;
@@ -431,7 +455,7 @@
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label2.Location = new Point(3, 152);
             label2.Name = "label2";
-            label2.Size = new Size(127, 21);
+            label2.Size = new Size(164, 21);
             label2.TabIndex = 5;
             label2.Text = "Animation Frames";
             label2.TextAlign = ContentAlignment.MiddleLeft;
@@ -439,7 +463,7 @@
             // removeAnimation
             // 
             removeAnimation.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            removeAnimation.Location = new Point(228, 123);
+            removeAnimation.Location = new Point(237, 123);
             removeAnimation.Margin = new Padding(0);
             removeAnimation.Name = "removeAnimation";
             removeAnimation.Size = new Size(32, 29);
@@ -451,7 +475,7 @@
             // addAnimation
             // 
             addAnimation.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addAnimation.Location = new Point(260, 123);
+            addAnimation.Location = new Point(269, 123);
             addAnimation.Margin = new Padding(0);
             addAnimation.Name = "addAnimation";
             addAnimation.Size = new Size(32, 29);
@@ -468,7 +492,7 @@
             animationsList.Items.AddRange(new object[] { "Hay", "awwa" });
             animationsList.Location = new Point(0, 36);
             animationsList.Name = "animationsList";
-            animationsList.Size = new Size(292, 84);
+            animationsList.Size = new Size(301, 84);
             animationsList.TabIndex = 2;
             animationsList.SelectedIndexChanged += animationsList_SelectedIndexChanged;
             animationsList.MouseDoubleClick += animationsList_MouseDoubleClick;
@@ -484,32 +508,15 @@
             // 
             // propertyGrid1
             // 
-            propertyGrid1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             propertyGrid1.BackColor = SystemColors.ActiveCaption;
             propertyGrid1.CommandsActiveLinkColor = Color.Red;
-            propertyGrid1.Location = new Point(0, 470);
+            propertyGrid1.Dock = DockStyle.Fill;
+            propertyGrid1.Location = new Point(0, 0);
             propertyGrid1.Name = "propertyGrid1";
-            propertyGrid1.Size = new Size(321, 252);
+            propertyGrid1.Size = new Size(327, 239);
             propertyGrid1.TabIndex = 3;
             propertyGrid1.ViewBorderColor = Color.Chocolate;
             propertyGrid1.PropertyValueChanged += propertyGrid1_PropertyValueChanged;
-            // 
-            // splitContainer1
-            // 
-            splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 28);
-            splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            splitContainer1.Panel1.Controls.Add(panel2);
-            // 
-            // splitContainer1.Panel2
-            // 
-            splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(1262, 725);
-            splitContainer1.SplitterDistance = 323;
-            splitContainer1.TabIndex = 5;
             // 
             // splitContainer2
             // 
@@ -525,7 +532,7 @@
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(animationControl);
-            splitContainer2.Size = new Size(935, 725);
+            splitContainer2.Size = new Size(931, 725);
             splitContainer2.SplitterDistance = 482;
             splitContainer2.TabIndex = 0;
             // 
@@ -535,7 +542,7 @@
             mainControl.Location = new Point(0, 0);
             mainControl.MouseHoverUpdatesOnly = false;
             mainControl.Name = "mainControl";
-            mainControl.Size = new Size(935, 482);
+            mainControl.Size = new Size(931, 482);
             mainControl.TabIndex = 0;
             mainControl.Text = "mainControl";
             // 
@@ -545,7 +552,7 @@
             animationControl.Location = new Point(0, 0);
             animationControl.MouseHoverUpdatesOnly = false;
             animationControl.Name = "animationControl";
-            animationControl.Size = new Size(935, 239);
+            animationControl.Size = new Size(931, 239);
             animationControl.TabIndex = 0;
             animationControl.Text = "animationControl1";
             // 
@@ -563,14 +570,16 @@
             Text = "Form1";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer3.Panel1.ResumeLayout(false);
+            splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer3).EndInit();
+            splitContainer3.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             splitContainer2.Panel1.ResumeLayout(false);
             splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
@@ -609,9 +618,12 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
 
-        #endregion
-
-        private Panel panel2;
+#endregion
+        private SplitContainer splitContainer1;
+        private SplitContainer splitContainer2;
+        private Editor.Controls.MainControl mainControl;
+        private Editor.Controls.AnimationControl animationControl;
+        private SplitContainer splitContainer3;
         private Panel panel1;
         private Button removeTexture;
         private Button addTexture;
@@ -627,9 +639,5 @@
         private ListBox animationsList;
         private Label label1;
         private PropertyGrid propertyGrid1;
-        private SplitContainer splitContainer1;
-        private SplitContainer splitContainer2;
-        private Editor.Controls.MainControl mainControl;
-        private Editor.Controls.AnimationControl animationControl;
     }
 }

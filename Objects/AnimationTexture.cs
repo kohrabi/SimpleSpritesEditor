@@ -9,22 +9,33 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-public class AnimationTexture : INotifyPropertyChanged
+public class AnimationTexture : INotifyPropertyChanged, IDisposable
 {
-    private string filePath = "";
-    private string rootPath = "";
-    private Texture2D texture;
+    private int _textureId = 0;
+    private string _filePath = "";
+    private string _rootPath = "";
+    private Texture2D _texture;
 
     public string FilePath
     {
-        get => filePath;
+        get => _filePath;
         set
         {
-            filePath = value;
+            _filePath = value;
             NotifyPropertyChanged(nameof(FilePath));
         }
     }
 
+    [Browsable(false)]
+    public Texture2D Texture => _texture;
+    public int TextureId => _textureId;
+
+    public AnimationTexture(string path, Texture2D texture, int textureId)
+    {
+        _filePath = path;
+        _texture = texture;
+        _textureId = textureId;
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -33,5 +44,9 @@ public class AnimationTexture : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    public void Dispose()
+    {
+        _texture.Dispose();
+    }
 }
 

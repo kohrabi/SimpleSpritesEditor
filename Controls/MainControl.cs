@@ -25,40 +25,45 @@ namespace Editor.Controls
         private Texture2D? _texture = null;
         private Vector2 mouseDownPosition = Vector2.Zero;
         private Vector2 prevCameraPosition = Vector2.Zero;
-        private Vector2 prevMouseLeftDownPosition = Vector2.Zero;
         private bool leftMouseButtonPressed = false;
         private Rectangle spriteRect = Rectangle.Empty;
         private const int SnapSize = 16;
         private bool setCameraFirstPosition = false;
-
         
         public BindingList<Animation> Animations = new BindingList<Animation>();
         public int SelectedAnimationIndex = -1;
         public int SelectedFrameIndex = -1;
         
-        private BindingList<Tuple<string, Texture2D>> _textures = new BindingList<Tuple<string, Texture2D>>();
-        private Dictionary<string, int> _textureIds = new Dictionary<string, int>(); // Texture Id mapping
+        private BindingList<AnimationTexture> _textures = new BindingList<AnimationTexture>();
+        private Dictionary<int, AnimationTexture> _textureIds = new(); // Id to Texture
         private int selectedTextureIndex = 0;
         private int textureId = 0;
         
         //public List<Animation> Animations => Animations;
-        public BindingList<Tuple<string, Texture2D>> Textures => _textures;
-        public Dictionary<string, int> TextureIds => _textureIds;
+        public BindingList<AnimationTexture> Textures => _textures;
+        public Dictionary<int, AnimationTexture> TextureIds => _textureIds;
 
         #region Setters
 
         #region Textures
 
+        bool checkTextureExists(string path)
+        {
+            return _textures.FirstOrDefault(texture => texture.FilePath == path, null) != null;
+        }
+
         public void LoadTexture(string path)
         {
-            if (_textureIds.ContainsKey(path)) return;
+            if (checkTextureExists(path)) return;
             try
             {  
                 FileStream fs = new FileStream(path, FileMode.Open);
                 _texture = Texture2D.FromStream(Editor.GraphicsDevice, fs);
-                
-                _textures.Add(new Tuple<string, Texture2D>(path, _texture));
-                _textureIds.Add(path, textureId++);
+
+                var texture = new AnimationTexture(path, _texture, textureId);
+                _textures.Add(texture);
+                _textureIds.Add(textureId, texture);
+                textureId++;
             }
             catch (Exception e)
             {
@@ -68,15 +73,18 @@ namespace Editor.Controls
 
         public void UnloadTexture(int index)
         {
-            _textures[index].Item2.Dispose();
-            _textureIds.Remove(_textures[index].Item1);
+            if (index < 0 || index > _textures.Count - 1) return;
+            var texture = _textures[index];
             _textures.RemoveAt(index);
+            _textureIds.Remove(texture.TextureId);
+            texture.Dispose();
         }
 
         public void SelectTexture(int textureIndex)
         {
+            if (textureIndex < 0 || textureIndex > _textures.Count - 1) return;
             selectedTextureIndex = textureIndex;
-            _texture = _textures[selectedTextureIndex].Item2;
+            _texture = _textures[selectedTextureIndex].Texture;
         }
         
         #endregion
@@ -86,7 +94,7 @@ namespace Editor.Controls
         public void AddNewFrame()
         {
             if (SelectedAnimationIndex < 0 || SelectedAnimationIndex > Animations.Count - 1) return;
-            AnimationFrame frame = new AnimationFrame(selectedTextureIndex);
+            AnimationFrame frame = new AnimationFrame(selectedTextureIndex, _textures[selectedTextureIndex].FilePath);
             Animations[SelectedAnimationIndex].AddFrame(frame);
         }
 
@@ -101,11 +109,6 @@ namespace Editor.Controls
                 LoadTexture(Path.Combine(result.RootPath, texture.Key.Replace('/',  '\\')));
             
         }
-        
-        private Vector2 screenCenter
-        {
-            get => new Vector2(Editor.GraphicsDevice.Viewport.Width / 2, Editor.GraphicsDevice.Viewport.Height / 2);
-        }
 
         public void NewAnimationList()
         {
@@ -114,6 +117,12 @@ namespace Editor.Controls
             defaultAnimation.SetName(Animation.SpriteOnlyAnimationName);
             Animations.Add(defaultAnimation);
         }
+
+        private Vector2 screenCenter
+        {
+            get => new Vector2(Editor.GraphicsDevice.Viewport.Width / 2, Editor.GraphicsDevice.Viewport.Height / 2);
+        }
+
         
         public MainControl()
         {
@@ -190,7 +199,7 @@ namespace Editor.Controls
             
             if (!spriteRect.IsEmpty)
                 Helper.DrawRectangle(Editor.spriteBatch, spriteRect, new Color(Color.Red, 0.4f), 1);
-            if (SelectedAnimationIndex != -1)
+            if (SelectedAnimationIndex != -1 && _texture != null)
             {
                 Animation anim =  Animations[SelectedAnimationIndex];
                 for (int i = 0; i < anim.Frames.Count; i++)
@@ -238,7 +247,6 @@ namespace Editor.Controls
 
             if (e.Button == MouseButtons.Left && _texture != null)
             {
-                prevMouseLeftDownPosition = new Vector2(e.X, e.Y);
                 Point mouseWorld = Helper.ScreenToWorld(new Point(e.X, e.Y), Editor.Camera).ToPoint();
                 
                 Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
@@ -277,6 +285,8 @@ namespace Editor.Controls
                     Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
                     spriteRect.X -= texturePosition.X;
                     spriteRect.Y -= texturePosition.Y;
+                    Animations[SelectedAnimationIndex].Frames[SelectedFrameIndex]
+                        .SetTexture(_textures[selectedTextureIndex].TextureId, _textures[selectedTextureIndex].FilePath);
                     Animations[SelectedAnimationIndex].Frames[SelectedFrameIndex].SetRect(spriteRect);
                 }
                 spriteRect = Rectangle.Empty;
@@ -297,6 +307,7 @@ namespace Editor.Controls
             {
                 
                 Point mouseWorld = Helper.ScreenToWorld(new Point(e.X, e.Y), Editor.Camera).ToPoint();
+                Console.WriteLine(mouseWorld);
                 Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
                 if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
                 {

@@ -2,6 +2,7 @@
 using Editor.Objects;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D9;
+using SharpDX.MediaFoundation.DirectX;
 using WinFormsApp1.Objects;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -20,8 +21,8 @@ public static class TextParser
         public string FileName;
         public int StartId = 0;
         public List<Animation> Animations;
-        public List<Tuple<string, Texture2D>> Textures;
-        public Dictionary<string, int> TextureIds; // Texture Id mapping
+        public List<AnimationTexture> Textures;
+        public Dictionary<int, AnimationTexture> TextureIds; // Texture Id mapping
         public EditorSetting EditorSetting = new EditorSetting();
 
         public TextParseSaveParams()
@@ -55,9 +56,8 @@ public static class TextParser
     
     public static void Save(TextParseSaveParams param)
     {
-        if (File.Exists(param.FileName))
-            File.Delete(param.FileName);
-        using (StreamWriter streamWriter = new StreamWriter(param.FileName))
+        string tempFile = Path.Combine(Path.GetDirectoryName(param.FileName), "Temp_" + Path.GetFileName(param.FileName));
+        using (StreamWriter streamWriter = new StreamWriter(tempFile))
         {
             streamWriter.WriteLine("# EDITOR ");
             streamWriter.WriteLine("# EDITOR rootPath " + param.RootPath);
@@ -67,15 +67,17 @@ public static class TextParser
             streamWriter.WriteLine(TEXTURES_PREFIX);
             foreach (var texture in param.Textures)
             {
-                string path = texture.Item1.Remove(0, param.RootPath.Length);
-                streamWriter.WriteLine(path + param.EditorSetting.Delimeter + param.TextureIds[texture.Item1]);
+                string path = texture.FilePath.Remove(0, param.RootPath.Length);
+                streamWriter.WriteLine(path + param.EditorSetting.Delimeter + texture.TextureId);
             }
             streamWriter.WriteLine();
             
             streamWriter.WriteLine(SPRITES_PREFIX);
-            int id = param.StartId;
+            int id = param.StartId + 1;
             foreach (var animation in param.Animations)
             {
+                if (animation.Name != Animation.SpriteOnlyAnimationName)
+                    streamWriter.WriteLine("# " + animation.Name.ToUpper());
                 foreach (var frame in animation.Frames)
                 {
                     streamWriter.WriteLine(id + param.EditorSetting.Delimeter + 
@@ -84,10 +86,12 @@ public static class TextParser
                                            frame.Rect.Right + param.EditorSetting.Delimeter +
                                            frame.Rect.Bottom + param.EditorSetting.Delimeter +
                                            frame.TextureId);
-                    streamWriter.WriteLine("# EDITOR frameName " + frame.Name);
+                    if (!(frame.Name.Length >= 5 && frame.Name.Substring(0, 5) == "Frame"))  
+                        streamWriter.WriteLine("# EDITOR frameName " + frame.Name);
                     frame.Id = id;
                     id++;
                 }
+                streamWriter.WriteLine();
             }
             streamWriter.WriteLine();
 
@@ -101,11 +105,17 @@ public static class TextParser
                 {
                     output += frame.Id + param.EditorSetting.Delimeter + frame.FrameTime + param.EditorSetting.Delimeter;
                 }
+                id++;
                 streamWriter.WriteLine(output);
                 streamWriter.WriteLine("# EDITOR animationName " + animation.Name);
+                streamWriter.WriteLine();
             }
         }
 
+        if (File.Exists(param.FileName))
+            File.Delete(param.FileName);
+        File.WriteAllBytes(param.FileName, File.ReadAllBytes(tempFile));
+        File.Delete(tempFile);
     }
 
     public static TextParseLoadResult? Load(string path, EditorSetting editorSetting)
@@ -120,11 +130,11 @@ public static class TextParser
             
             try
             {
-                
                 TextParseLoadResult result = new TextParseLoadResult();
                 result.Path = path;
                 int section = 0;
                 Dictionary<int, AnimationFrame> frames = new();
+                Dictionary<int, bool> frameInAnimation = new();
                 while (!streamReader.EndOfStream)
                 {
                     string line = streamReader.ReadLine() ?? "";
@@ -137,9 +147,9 @@ public static class TextParser
                         {
                             line = line.Split("# EDITOR").Last().Trim();
                             string[] tokens = line.Split(' ');
-                            if (tokens[0] == "rootPath")
-                                result.RootPath = tokens[1];
-                            if (tokens[0] == "startId")
+                            if (tokens[0] == "rootPath" && tokens.Length == 2)
+                                result.RootPath = Path.GetFullPath(tokens[1]);
+                            if (tokens[0] == "startId" && tokens.Length == 2)
                                 result.StartId = int.Parse(tokens[1]);
                             if (tokens[0] == "frameName" && frames.Count > 0)
                             {
@@ -214,8 +224,8 @@ public static class TextParser
                                     int frameTime = int.Parse(tokens[i + 1]);
                                     frames[frameId].SetFrameTime(frameTime);
                                     animation.AddFrame(frames[frameId]);
-
-                                    frames.Remove(frameId);
+                                    if (!frameInAnimation.ContainsKey(frameId))
+                                        frameInAnimation.Add(frameId, true);
                                 }
                                 result.Animations.Add(animation);
                             }
@@ -231,7 +241,8 @@ public static class TextParser
                     anim.SetName(Animation.SpriteOnlyAnimationName);
                     foreach (var frame in frames)
                     {
-                        anim.AddFrame(frame.Value);
+                        if (!frameInAnimation.ContainsKey(frame.Key))
+                            anim.AddFrame(frame.Value);
                     }
                     result.Animations.Insert(0, anim);
                 }

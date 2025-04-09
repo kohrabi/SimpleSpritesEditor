@@ -14,7 +14,6 @@ public static class HeaderExport
         public string ObjectName;
         public int StartId = 0;
         public List<Animation> Animations;
-        public Dictionary<string, int> TextureIds;
 
         public HeaderExportParams()
         {
@@ -23,7 +22,6 @@ public static class HeaderExport
             ContentFilePath = null;
             ObjectName = null;
             Animations = null;
-            TextureIds = null;
         }
     }
     
@@ -71,6 +69,7 @@ public static class HeaderExport
                 string outputAnimation = "#define " + param.ObjectName.ToUpper() + "_ID_ANIMATION_";
                 outputAnimation += animation.Name.ToUpper().Replace(" ", "_");
                 outputAnimation += " " + id;
+                id++;
                 streamWriter.WriteLine(outputAnimation);
             }
         }

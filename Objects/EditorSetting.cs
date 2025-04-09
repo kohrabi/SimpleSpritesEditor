@@ -9,6 +9,8 @@ public class EditorSetting : INotifyPropertyChanged
     private string _delimeter = " ";
     private Point _gridSize = new Point(16);
     private int _startID = 0;
+    private string _filePath = String.Empty;
+    private string _rootPath = String.Empty;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -66,7 +68,27 @@ public class EditorSetting : INotifyPropertyChanged
         }
     }
 
+    [EditorAttribute(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+    public string FilePath
+    {
+        get => _filePath;
+        set
+        {
+            _filePath = value;
+            NotifyPropertyChanged(nameof(FilePath));
+        }
+    }
 
+    [EditorAttribute(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+    public string RootPath
+    {
+        get => _rootPath;
+        set
+        {
+            _rootPath = value;
+            NotifyPropertyChanged(nameof(RootPath));
+        }
+    }
 
     public EditorSetting()
     { }
