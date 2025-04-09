@@ -29,14 +29,14 @@ namespace WinFormsApp1
             saveFileDialog = new SaveFileDialog();
 
             InitializeComponent();
-            animationsList.DataSource = sampleControl.Animations;
+            animationsList.DataSource = mainControl.Animations;
             animationsList.DisplayMember = "Name";
 
             var animationFramesBinding = new BindingList<AnimationFrame>();
             animationFramesList.DataSource = animationFramesBinding;
             animationFramesList.DisplayMember = "Name";
 
-            texturesList.DataSource = sampleControl.Textures;
+            texturesList.DataSource = mainControl.Textures;
             texturesList.DisplayMember = "Item1";
 
             inputTextBox.Hide();
@@ -53,19 +53,19 @@ namespace WinFormsApp1
                     return;
                 }
                 var result = (TextParser.TextParseLoadResult)resultNull;
-                sampleControl.SetLoad(result);
+                mainControl.SetLoad(result);
                 filePath = result.Path;
                 rootPath = result.RootPath;
 
-                if (sampleControl.Animations.Count > 0)
+                if (mainControl.Animations.Count > 0)
                 {
-                    var animationFramesBinding = new BindingList<AnimationFrame>(sampleControl.Animations[0].Frames);
+                    var animationFramesBinding = new BindingList<AnimationFrame>(mainControl.Animations[0].Frames);
                     animationFramesList.DataSource = animationFramesBinding;
                     animationFramesList.DisplayMember = "Name";
                 }
 
-                animationsList.DataSource = sampleControl.Animations;
-                texturesList.DataSource = new BindingList<Tuple<string, Texture2D>>(sampleControl.Textures);
+                animationsList.DataSource = mainControl.Animations;
+                texturesList.DataSource = new BindingList<Tuple<string, Texture2D>>(mainControl.Textures);
                 (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
 
             }
@@ -75,30 +75,30 @@ namespace WinFormsApp1
 
         private void addAnimation_Click(object sender, EventArgs e)
         {
-            if (texturesList.SelectedIndex < 0 || texturesList.SelectedIndex > sampleControl.Textures.Count - 1) return;
+            if (texturesList.SelectedIndex < 0 || texturesList.SelectedIndex > mainControl.Textures.Count - 1) return;
 
-            sampleControl.Animations.Add(new Animation());
-            animationsList.SelectedIndex = sampleControl.Animations.Count - 1;
-            sampleControl.SelectedAnimationIndex = animationsList.SelectedIndex;
+            mainControl.Animations.Add(new Animation());
+            animationsList.SelectedIndex = mainControl.Animations.Count - 1;
+            mainControl.SelectedAnimationIndex = animationsList.SelectedIndex;
 
-            animationFramesList.DataSource = sampleControl.Animations[sampleControl.SelectedAnimationIndex].Frames;
+            animationFramesList.DataSource = mainControl.Animations[mainControl.SelectedAnimationIndex].Frames;
             animationFramesList.DisplayMember = "Name";
         }
 
         private void removeAnimation_Click(object sender, EventArgs e)
         {
-            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > sampleControl.Animations.Count - 1) return;
-            sampleControl.Animations.RemoveAt(sampleControl.SelectedFrameIndex);
+            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > mainControl.Animations.Count - 1) return;
+            mainControl.Animations.RemoveAt(mainControl.SelectedFrameIndex);
         }
 
         private void animationsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > sampleControl.Animations.Count - 1) return;
-            sampleControl.SelectedAnimationIndex = animationsList.SelectedIndex;
-            propertyGrid1.SelectedObject = sampleControl.Animations[sampleControl.SelectedAnimationIndex];
+            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > mainControl.Animations.Count - 1) return;
+            mainControl.SelectedAnimationIndex = animationsList.SelectedIndex;
+            propertyGrid1.SelectedObject = mainControl.Animations[mainControl.SelectedAnimationIndex];
 
 
-            animationFramesList.DataSource = sampleControl.Animations[sampleControl.SelectedAnimationIndex].Frames;
+            animationFramesList.DataSource = mainControl.Animations[mainControl.SelectedAnimationIndex].Frames;
             animationFramesList.DisplayMember = "Name";
 
         }
@@ -114,26 +114,26 @@ namespace WinFormsApp1
 
         private void addAnimationFrame_Click(object sender, EventArgs e)
         {
-            sampleControl.AddNewFrame();
+            mainControl.AddNewFrame();
             var dataSource = animationFramesList.DataSource as BindingList<AnimationFrame>;
             dataSource.ResetBindings();
 
             animationFramesList.SelectedIndex = dataSource.Count - 1;
-            sampleControl.SelectedFrameIndex = animationFramesList.SelectedIndex;
+            mainControl.SelectedFrameIndex = animationFramesList.SelectedIndex;
             dataSource.ResetBindings();
         }
 
         private void removeAnimationFrame_Click(object sender, EventArgs e)
         {
-            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > sampleControl.Animations.Count - 1) return;
+            if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > mainControl.Animations.Count - 1) return;
             if (animationFramesList.SelectedIndex < 0 || animationFramesList.SelectedIndex >
-                sampleControl.Animations[sampleControl.SelectedAnimationIndex].Frames.Count - 1) return;
-            (animationFramesList.DataSource as BindingList<AnimationFrame>).RemoveAt(sampleControl.SelectedFrameIndex);
+                mainControl.Animations[mainControl.SelectedAnimationIndex].Frames.Count - 1) return;
+            (animationFramesList.DataSource as BindingList<AnimationFrame>).RemoveAt(mainControl.SelectedFrameIndex);
         }
 
         private void animationFramesList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            sampleControl.SelectedFrameIndex = animationFramesList.SelectedIndex;
+            mainControl.SelectedFrameIndex = animationFramesList.SelectedIndex;
             propertyGrid1.SelectedObject = animationFramesList.SelectedItem;
         }
 
@@ -151,7 +151,7 @@ namespace WinFormsApp1
             openFileDialog.Filter = "*.png|*.png";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                sampleControl.LoadTexture(openFileDialog.FileName);
+                mainControl.LoadTexture(openFileDialog.FileName);
                 (texturesList.DataSource as BindingList<Tuple<string, Texture2D>>).ResetBindings();
             }
         }
@@ -159,13 +159,13 @@ namespace WinFormsApp1
         private void removeTexture_Click(object sender, EventArgs e)
         {
             if (texturesList.SelectedIndex < 0 || texturesList.SelectedIndex > texturesList.Items.Count - 1) return;
-            sampleControl.UnloadTexture(texturesList.SelectedIndex);
+            mainControl.UnloadTexture(texturesList.SelectedIndex);
             (texturesList.DataSource as BindingList<Tuple<string, Texture2D>>).ResetBindings();
         }
 
         private void texturesList_SelectedIndexChange(object sender, EventArgs e)
         {
-            sampleControl.SelectTexture(texturesList.SelectedIndex);
+            mainControl.SelectTexture(texturesList.SelectedIndex);
         }
 
         #endregion
@@ -209,9 +209,9 @@ namespace WinFormsApp1
             param.RootPath = rootPath;
             param.EditorSetting = editorSetting;
             param.StartId = editorSetting.StartID;
-            param.Animations = sampleControl.Animations.ToList();
-            param.Textures = sampleControl.Textures.ToList();
-            param.TextureIds = sampleControl.TextureIds;
+            param.Animations = mainControl.Animations.ToList();
+            param.Textures = mainControl.Textures.ToList();
+            param.TextureIds = mainControl.TextureIds;
             if (filePath == "")
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -243,8 +243,8 @@ namespace WinFormsApp1
                 param.RootPath = rootPath;
                 param.ContentFilePath = filePath;
                 param.StartId = editorSetting.StartID;
-                param.Animations = sampleControl.Animations.ToList();
-                param.TextureIds = sampleControl.TextureIds;
+                param.Animations = mainControl.Animations.ToList();
+                param.TextureIds = mainControl.TextureIds;
                 param.ObjectName = "Koopa";
                 HeaderExport.Export(param);
             }
@@ -252,8 +252,8 @@ namespace WinFormsApp1
 
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            sampleControl.Animations.ResetBindings();
-            sampleControl.Textures.ResetBindings();
+            mainControl.Animations.ResetBindings();
+            mainControl.Textures.ResetBindings();
             (animationFramesList.DataSource as BindingList<AnimationFrame>).ResetBindings();
         }
 

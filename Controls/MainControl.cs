@@ -15,7 +15,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Editor.Controls
 {
-    public class SampleControl : MonoGameControl
+    public class MainControl : MonoGameControl
     {
         // Fields & Properties here!
         private const string WelcomeMessage = "Add an image to create Animation";
@@ -115,7 +115,7 @@ namespace Editor.Controls
             Animations.Add(defaultAnimation);
         }
         
-        public SampleControl()
+        public MainControl()
         {
             NewAnimationList();
         }

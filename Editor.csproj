@@ -10,11 +10,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="Logo.ico"/>
+        <Content Include="Logo.ico" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MonoGame.Forms.DX" Version="3.2.0"/>
+        <PackageReference Include="MonoGame.Forms.DX" Version="3.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Controls\MainControl.cs">
+        <SubType>Component</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
