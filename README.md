@@ -5,6 +5,9 @@ Hiện tại Editor chỉ load được theo cái Loader mà mình đã sửa l�
  - Export ra file .txt theo format của thầy.
  - Export ra file .h để lấy được Id của Sprites và Animation.
 ![image](https://github.com/user-attachments/assets/cb0a9246-c6b7-42ed-96cf-62e49c629eff)
+
+## Requirements
+Dotnet6.0
 # How to use
  - Tải ở bên kia
  - Bấm vào một phần trống ở khung của số Animation để hiện lên EditorSetting(Có ObjectName, RootPath, ObjectID(để Define không bị trùng))
