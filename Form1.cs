@@ -33,10 +33,22 @@ namespace WinFormsApp1
             var animationFramesBinding = new BindingList<AnimationFrame>();
             animationFramesList.DataSource = animationFramesBinding;
             animationFramesList.DisplayMember = "Name";
+            animationFramesList.SelectedIndexChanged += (o, e) =>
+            {
+                mainControl.Invalidate();
+                animationControl.Invalidate();
+            };
 
             texturesList.DataSource = mainControl.Textures;
             texturesList.DisplayMember = "FilePath";
 
+            texturesList.SelectedIndexChanged += (o, e) =>
+            {
+                mainControl.Invalidate();
+                animationControl.Invalidate();
+            };
+            
+            
             animationControl.MainControl = mainControl;
 
             inputTextBox.Hide();
@@ -55,6 +67,7 @@ namespace WinFormsApp1
                 var result = (TextParser.TextParseLoadResult)resultNull;
                 mainControl.SetLoad(result);
                 editorSetting.FilePath = result.Path;
+                editorSetting.ObjectName = result.ObjectName;
                 if (result.RootPath != "")
                     editorSetting.RootPath = result.RootPath;
                 else
@@ -87,12 +100,15 @@ namespace WinFormsApp1
 
             animationFramesList.DataSource = mainControl.Animations[mainControl.SelectedAnimationIndex].Frames;
             animationFramesList.DisplayMember = "Name";
+            
         }
 
         private void removeAnimation_Click(object sender, EventArgs e)
         {
             if (animationsList.SelectedIndex < 0 || animationsList.SelectedIndex > mainControl.Animations.Count - 1) return;
             mainControl.Animations.RemoveAt(mainControl.SelectedFrameIndex);
+            mainControl.Invalidate();
+            animationControl.Invalidate();
         }
 
         private void animationsList_SelectedIndexChanged(object sender, EventArgs e)
@@ -218,6 +234,7 @@ namespace WinFormsApp1
             param.TextureIds = mainControl.TextureIds;
             param.Animations = mainControl.Animations.ToList();
             param.Textures = mainControl.Textures.ToList();
+            param.ObjectName = editorSetting.ObjectName;
             if (editorSetting.FilePath == "")
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -241,7 +258,7 @@ namespace WinFormsApp1
         {
             saveFileDialog.DefaultExt = ".h";
             saveFileDialog.Filter = "*.h|*.h";
-            saveFileDialog.FileName = "ObjectName";
+            saveFileDialog.FileName = editorSetting.ObjectName.Replace(" ", "");
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 HeaderExport.HeaderExportParams param = new HeaderExport.HeaderExportParams();
@@ -250,7 +267,7 @@ namespace WinFormsApp1
                 param.ContentFilePath = editorSetting.FilePath;
                 param.StartId = editorSetting.StartID;
                 param.Animations = mainControl.Animations.ToList();
-                param.ObjectName = "Koopa";
+                param.ObjectName = editorSetting.ObjectName;
                 HeaderExport.Export(param);
             }
         }

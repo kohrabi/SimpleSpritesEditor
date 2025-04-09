@@ -19,6 +19,7 @@ public static class TextParser
     {
         public string RootPath;
         public string FileName;
+        public string ObjectName;
         public int StartId = 0;
         public List<Animation> Animations;
         public List<AnimationTexture> Textures;
@@ -29,6 +30,7 @@ public static class TextParser
         {
             RootPath = null;
             FileName = null;
+            ObjectName = null;
             Animations = null;
             Textures = null;
             TextureIds = null;
@@ -43,6 +45,7 @@ public static class TextParser
         public Dictionary<string, int> TextureIds; // Texture Id mapping
         public List<Animation> Animations;
         public List<AnimationFrame> Frames;
+        public string ObjectName = "";
 
         public TextParseLoadResult()
         {
@@ -62,12 +65,14 @@ public static class TextParser
             streamWriter.WriteLine("# EDITOR ");
             streamWriter.WriteLine("# EDITOR rootPath " + param.RootPath);
             streamWriter.WriteLine("# EDITOR startID " + param.StartId);
+            streamWriter.WriteLine("# EDITOR objectName " + param.EditorSetting.ObjectName);
             streamWriter.WriteLine();
             
             streamWriter.WriteLine(TEXTURES_PREFIX);
             foreach (var texture in param.Textures)
             {
                 string path = texture.FilePath.Remove(0, param.RootPath.Length);
+                path = Helper.FixPath(path);
                 streamWriter.WriteLine(path + param.EditorSetting.Delimeter + texture.TextureId);
             }
             streamWriter.WriteLine();
@@ -151,6 +156,8 @@ public static class TextParser
                                 result.RootPath = Path.GetFullPath(tokens[1]);
                             if (tokens[0] == "startId" && tokens.Length == 2)
                                 result.StartId = int.Parse(tokens[1]);
+                            if (tokens[0] == "objectName" && tokens.Length == 2)
+                                result.ObjectName = tokens[1];
                             if (tokens[0] == "frameName" && frames.Count > 0)
                             {
                                 frames[frames.Keys.Last()].Name = String.Join(" ", tokens.Skip(1));
@@ -193,7 +200,7 @@ public static class TextParser
                                 string[] tokens = line.Split(editorSetting.Delimeter);
                                 if (tokens.Length != 2)
                                     throw new FormatException("[ERROR]: Wrong format for TEXTURES");
-                                result.TextureIds.Add(tokens[0], int.Parse(tokens[1]));
+                                result.TextureIds.Add(Helper.FixPath(tokens[0]), int.Parse(tokens[1]));
                             }
                             break;
                         case SPRITES_SECTION:

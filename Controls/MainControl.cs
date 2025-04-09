@@ -22,10 +22,11 @@ namespace Editor.Controls
 
         private static readonly Point cameraClamp = new Point(100, 100);
 
-        private Texture2D? _texture = null;
         private Vector2 mouseDownPosition = Vector2.Zero;
         private Vector2 prevCameraPosition = Vector2.Zero;
         private bool leftMouseButtonPressed = false;
+        
+        private Texture2D? _texture = null;
         private Rectangle spriteRect = Rectangle.Empty;
         private const int SnapSize = 16;
         private bool setCameraFirstPosition = false;
@@ -104,12 +105,29 @@ namespace Editor.Controls
 
         public void SetLoad(TextParser.TextParseLoadResult result)
         {
+            Reset();
             Animations = new BindingList<Animation>(result.Animations);
             foreach (var texture in result.TextureIds)
                 LoadTexture(Path.Combine(result.RootPath, texture.Key.Replace('/',  '\\')));
-            
+
         }
 
+        public void Reset()
+        {
+            
+            foreach (var texture in _textures)
+                texture.Dispose();
+            _textures.Clear();
+            _textureIds.Clear();
+            Animations.Clear();
+            _texture = null;
+            spriteRect = Rectangle.Empty;
+            SelectedAnimationIndex = -1;
+            SelectedFrameIndex = -1;
+            selectedTextureIndex = 0;
+            textureId = 0;
+        }
+        
         public void NewAnimationList()
         {
             Animations.Clear();
@@ -247,6 +265,7 @@ namespace Editor.Controls
 
             if (e.Button == MouseButtons.Left && _texture != null)
             {
+                spriteRect = Rectangle.Empty;
                 Point mouseWorld = Helper.ScreenToWorld(new Point(e.X, e.Y), Editor.Camera).ToPoint();
                 
                 Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
@@ -289,7 +308,6 @@ namespace Editor.Controls
                         .SetTexture(_textures[selectedTextureIndex].TextureId, _textures[selectedTextureIndex].FilePath);
                     Animations[SelectedAnimationIndex].Frames[SelectedFrameIndex].SetRect(spriteRect);
                 }
-                spriteRect = Rectangle.Empty;
             }
             
         }

@@ -11,6 +11,7 @@ public class EditorSetting : INotifyPropertyChanged
     private int _startID = 0;
     private string _filePath = String.Empty;
     private string _rootPath = String.Empty;
+    private string _objectName = String.Empty;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -65,6 +66,16 @@ public class EditorSetting : INotifyPropertyChanged
             _gridSize.X = value.Width;
             _gridSize.Y = value.Height;
             NotifyPropertyChanged(nameof(GridSize));
+        }
+    }
+
+    public string ObjectName
+    {
+        get => _objectName;
+        set
+        {
+            _objectName = value;
+            NotifyPropertyChanged(nameof(ObjectName));  
         }
     }
 

@@ -15,6 +15,15 @@ public static class Helper
     {
         return Vector2.Transform(screenPosition.ToVector2(), Matrix.Invert(camera.GetTransform()));
     }
+
+    public static string FixPath(string path)
+    {
+        if (path.First() == '/' || path.First() == '\\')
+            path = path.Remove(0, 1);
+        if (path.Last() == '/' || path.Last() == '\\')
+            path = path.Remove(path.Length - 2, 1);
+        return path;
+    }
         
     public static void DrawGrid(SpriteBatch spriteBatch, int rows, int cols, int gridSize, int addedX, int addedY)
     {

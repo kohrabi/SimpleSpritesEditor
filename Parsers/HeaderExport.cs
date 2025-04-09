@@ -29,6 +29,7 @@ public static class HeaderExport
     {
         if (File.Exists(param.FilePath))
             File.Delete(param.FilePath);
+        param.ObjectName = param.ObjectName.ToUpper().Replace(" ", "_");
         using (StreamWriter streamWriter = new StreamWriter(param.FilePath))
         {
             streamWriter.WriteLine("#pragma once");
