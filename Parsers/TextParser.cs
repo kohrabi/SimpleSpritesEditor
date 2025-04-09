@@ -154,7 +154,7 @@ public static class TextParser
                             string[] tokens = line.Split(' ');
                             if (tokens[0] == "rootPath" && tokens.Length == 2)
                                 result.RootPath = Path.GetFullPath(tokens[1]);
-                            if (tokens[0] == "startId" && tokens.Length == 2)
+                            if (tokens[0] == "startID" && tokens.Length == 2)
                                 result.StartId = int.Parse(tokens[1]);
                             if (tokens[0] == "objectName" && tokens.Length == 2)
                                 result.ObjectName = tokens[1];

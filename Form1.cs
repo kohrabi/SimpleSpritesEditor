@@ -68,6 +68,7 @@ namespace WinFormsApp1
                 mainControl.SetLoad(result);
                 editorSetting.FilePath = result.Path;
                 editorSetting.ObjectName = result.ObjectName;
+                editorSetting.StartID = result.StartId;
                 if (result.RootPath != "")
                     editorSetting.RootPath = result.RootPath;
                 else
