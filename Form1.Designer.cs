@@ -116,6 +116,7 @@
             newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N));
             newToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
             newToolStripMenuItem.Text = "&New";
+            newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
@@ -148,6 +149,7 @@
             saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) | System.Windows.Forms.Keys.S));
             saveAsToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
             saveAsToolStripMenuItem.Text = "Save &As";
+            saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -355,7 +357,7 @@
             // removeTexture
             // 
             removeTexture.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            removeTexture.Location = new System.Drawing.Point(216, 408);
+            removeTexture.Location = new System.Drawing.Point(153, 408);
             removeTexture.Margin = new System.Windows.Forms.Padding(0);
             removeTexture.Name = "removeTexture";
             removeTexture.Size = new System.Drawing.Size(32, 29);
@@ -367,7 +369,7 @@
             // addTexture
             // 
             addTexture.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            addTexture.Location = new System.Drawing.Point(248, 408);
+            addTexture.Location = new System.Drawing.Point(185, 408);
             addTexture.Margin = new System.Windows.Forms.Padding(0);
             addTexture.Name = "addTexture";
             addTexture.Size = new System.Drawing.Size(32, 29);
@@ -384,7 +386,7 @@
             texturesList.Items.AddRange(new object[] { "Hay", "awwa" });
             texturesList.Location = new System.Drawing.Point(0, 321);
             texturesList.Name = "texturesList";
-            texturesList.Size = new System.Drawing.Size(280, 84);
+            texturesList.Size = new System.Drawing.Size(217, 84);
             texturesList.TabIndex = 11;
             texturesList.SelectedIndexChanged += texturesList_SelectedIndexChange;
             // 
@@ -394,7 +396,7 @@
             label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label3.Location = new System.Drawing.Point(3, 295);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(171, 21);
+            label3.Size = new System.Drawing.Size(108, 21);
             label3.TabIndex = 10;
             label3.Text = "Textures";
             label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -412,7 +414,7 @@
             // removeAnimationFrame
             // 
             removeAnimationFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            removeAnimationFrame.Location = new System.Drawing.Point(216, 263);
+            removeAnimationFrame.Location = new System.Drawing.Point(153, 263);
             removeAnimationFrame.Margin = new System.Windows.Forms.Padding(0);
             removeAnimationFrame.Name = "removeAnimationFrame";
             removeAnimationFrame.Size = new System.Drawing.Size(32, 29);
@@ -424,7 +426,7 @@
             // addAnimationFrame
             // 
             addAnimationFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            addAnimationFrame.Location = new System.Drawing.Point(248, 263);
+            addAnimationFrame.Location = new System.Drawing.Point(185, 263);
             addAnimationFrame.Margin = new System.Windows.Forms.Padding(0);
             addAnimationFrame.Name = "addAnimationFrame";
             addAnimationFrame.Size = new System.Drawing.Size(32, 29);
@@ -441,7 +443,7 @@
             animationFramesList.Items.AddRange(new object[] { "Hay", "awwa" });
             animationFramesList.Location = new System.Drawing.Point(0, 176);
             animationFramesList.Name = "animationFramesList";
-            animationFramesList.Size = new System.Drawing.Size(280, 84);
+            animationFramesList.Size = new System.Drawing.Size(217, 84);
             animationFramesList.TabIndex = 6;
             animationFramesList.SelectedIndexChanged += animationFramesList_SelectedIndexChanged;
             animationFramesList.MouseDoubleClick += animationFramesList_MouseDoubleClick;
@@ -452,7 +454,7 @@
             label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label2.Location = new System.Drawing.Point(3, 152);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(143, 21);
+            label2.Size = new System.Drawing.Size(80, 21);
             label2.TabIndex = 5;
             label2.Text = "Animation Frames";
             label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -460,7 +462,7 @@
             // removeAnimation
             // 
             removeAnimation.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            removeAnimation.Location = new System.Drawing.Point(216, 123);
+            removeAnimation.Location = new System.Drawing.Point(153, 123);
             removeAnimation.Margin = new System.Windows.Forms.Padding(0);
             removeAnimation.Name = "removeAnimation";
             removeAnimation.Size = new System.Drawing.Size(32, 29);
@@ -472,7 +474,7 @@
             // addAnimation
             // 
             addAnimation.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            addAnimation.Location = new System.Drawing.Point(248, 123);
+            addAnimation.Location = new System.Drawing.Point(185, 123);
             addAnimation.Margin = new System.Windows.Forms.Padding(0);
             addAnimation.Name = "addAnimation";
             addAnimation.Size = new System.Drawing.Size(32, 29);
@@ -489,7 +491,7 @@
             animationsList.Items.AddRange(new object[] { "Hay", "awwa" });
             animationsList.Location = new System.Drawing.Point(0, 36);
             animationsList.Name = "animationsList";
-            animationsList.Size = new System.Drawing.Size(280, 84);
+            animationsList.Size = new System.Drawing.Size(217, 84);
             animationsList.TabIndex = 2;
             animationsList.SelectedIndexChanged += animationsList_SelectedIndexChanged;
             animationsList.MouseDoubleClick += animationsList_MouseDoubleClick;

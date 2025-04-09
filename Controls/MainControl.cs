@@ -114,12 +114,12 @@ namespace Editor.Controls
 
         public void Reset()
         {
-            
             foreach (var texture in _textures)
                 texture.Dispose();
             _textures.Clear();
+            _textures.ResetBindings();
             _textureIds.Clear();
-            Animations.Clear();
+            NewAnimationList();
             _texture = null;
             spriteRect = Rectangle.Empty;
             SelectedAnimationIndex = -1;

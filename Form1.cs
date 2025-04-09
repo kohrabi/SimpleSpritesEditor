@@ -11,6 +11,7 @@ namespace WinFormsApp1
     {
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
+        private SaveFileDialog exportFileDialog;
 
         private EditorSetting editorSetting = new EditorSetting();
 
@@ -25,6 +26,13 @@ namespace WinFormsApp1
             openFileDialog = new OpenFileDialog();
 
             saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = ".txt";
+            saveFileDialog.Filter = "*.txt|*.txt";
+            
+            exportFileDialog = new SaveFileDialog();
+            exportFileDialog.DefaultExt = ".h";
+            exportFileDialog.Filter = "*.h|*.h";
+            exportFileDialog.FileName = editorSetting.ObjectName.Replace(" ", "");
 
             InitializeComponent();
             animationsList.DataSource = mainControl.Animations;
@@ -56,7 +64,6 @@ namespace WinFormsApp1
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "*.txt|*.txt";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 TextParser.TextParseLoadResult? resultNull = TextParser.Load(openFileDialog.FileName, editorSetting);
@@ -227,7 +234,7 @@ namespace WinFormsApp1
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (editorSetting.FilePath.Trim() == "") return;
+            // if (editorSetting.FilePath.Trim() == "") return;
             TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
             param.RootPath = editorSetting.RootPath;
             param.EditorSetting = editorSetting;
@@ -236,6 +243,7 @@ namespace WinFormsApp1
             param.Animations = mainControl.Animations.ToList();
             param.Textures = mainControl.Textures.ToList();
             param.ObjectName = editorSetting.ObjectName;
+            saveFileDialog.FileName = param.ObjectName.ToLower().Replace(" ", "_");
             if (editorSetting.FilePath == "")
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -252,18 +260,21 @@ namespace WinFormsApp1
             {
                 param.FileName = editorSetting.FilePath;
             }
-            TextParser.Save(param);
+
+            if (param.FileName.Trim() != "")
+            {
+                editorSetting.FilePath = param.FileName.Trim();
+                TextParser.Save(param);
+            }
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog.DefaultExt = ".h";
-            saveFileDialog.Filter = "*.h|*.h";
-            saveFileDialog.FileName = editorSetting.ObjectName.Replace(" ", "");
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            exportFileDialog.FileName = editorSetting.ObjectName.Replace(" ", "");
+            if (exportFileDialog.ShowDialog() == DialogResult.OK)
             {
                 HeaderExport.HeaderExportParams param = new HeaderExport.HeaderExportParams();
-                param.FilePath = saveFileDialog.FileName;
+                param.FilePath = exportFileDialog.FileName;
                 param.RootPath = editorSetting.RootPath;
                 param.ContentFilePath = editorSetting.FilePath;
                 param.StartId = editorSetting.StartID;
@@ -283,6 +294,39 @@ namespace WinFormsApp1
         private void panel1_Click(object sender, EventArgs e)
         {
             propertyGrid1.SelectedObject = editorSetting;
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.FileName = editorSetting.ObjectName.ToLower().Replace(" ", "");
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                TextParser.TextParseSaveParams param = new TextParser.TextParseSaveParams();
+                editorSetting.FilePath = saveFileDialog.FileName; 
+                param.FileName = saveFileDialog.FileName;
+                
+                
+                param.RootPath = editorSetting.RootPath;
+                param.EditorSetting = editorSetting;
+                param.StartId = editorSetting.StartID;
+                param.TextureIds = mainControl.TextureIds;
+                param.Animations = mainControl.Animations.ToList();
+                param.Textures = mainControl.Textures.ToList();
+                param.ObjectName = editorSetting.ObjectName;
+                
+                if (editorSetting.FilePath.Trim() != "")    
+                    TextParser.Save(param);
+                
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editorSetting = new EditorSetting();
+            mainControl.Reset();
+            
+            animationFramesList.DataSource = new BindingList<AnimationFrame>();
+            texturesList.DataSource = mainControl.Textures;
         }
     }
 }

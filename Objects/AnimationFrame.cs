@@ -58,7 +58,15 @@ public class AnimationFrame : INotifyPropertyChanged
         }
     }
 
-    public int TextureId => _textureId;
+    public int TextureId
+    {
+        get => _textureId;
+        set
+        {
+            _textureId = value;
+            NotifyPropertyChanged(nameof(TextureId));   
+        }
+    }
     public string TexturePath => _texturePath;
     public int FrameTime
     {
