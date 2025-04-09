@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using WinFormsApp1.Data;
+using WinFormsApp1.Objects;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace WinFormsApp1.Parsers;

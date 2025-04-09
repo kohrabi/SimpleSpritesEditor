@@ -1,4 +1,4 @@
-﻿using WinFormsApp1.Data;
+﻿using WinFormsApp1.Objects;
 
 namespace WinFormsApp1.Parsers;
 

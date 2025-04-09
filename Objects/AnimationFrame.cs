@@ -1,8 +1,10 @@
-﻿namespace WinFormsApp1.Data;
+﻿namespace WinFormsApp1.Objects;
 
 using Microsoft.Xna.Framework;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class AnimationFrame
+public class AnimationFrame : INotifyPropertyChanged
 {
     public int Id = 0;
     private string _name = "New Frame";
@@ -10,10 +12,60 @@ public class AnimationFrame
     private int _textureId;
     private int _frameTime = 10;
 
-    public string Name => _name;
-    public Rectangle Rect => _rect;
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public string Name { 
+        get => _name;
+        set
+        {
+            _name = value;
+            NotifyPropertyChanged(nameof(Name));
+        }
+    }
+
+    [Browsable(false)]
+    public Rectangle Rect 
+    { 
+        get => _rect; 
+        set
+        {
+            _rect = value;
+            NotifyPropertyChanged(nameof(Rect));
+        }
+    }
+
+    public Size RectSize
+    {
+        get => new Size(_rect.Width, _rect.Height);
+        set
+        {
+            _rect.Width = value.Width;
+            _rect.Height = value.Height;
+            NotifyPropertyChanged(nameof(Rect));
+        }
+    }
+
+    public System.Drawing.Point RectPosition
+    {
+        get => new System.Drawing.Point(_rect.X, _rect.Y);
+        set
+        {
+            _rect.X = value.X;
+            _rect.Y = value.Y;
+            NotifyPropertyChanged(nameof(Rect));
+        }
+    }
+
     public int TextureId => _textureId;
-    public int FrameTime => _frameTime;
+    public int FrameTime
+    {
+        get => _frameTime;
+        set
+        {
+            _frameTime = value;
+            NotifyPropertyChanged(nameof(FrameTime));
+        }
+    }
 
     public AnimationFrame(int textureId)
     {
@@ -23,16 +75,24 @@ public class AnimationFrame
     public void SetName(string name)
     {
         _name = name;
+        NotifyPropertyChanged(nameof(Name));
     }
 
     public void SetRect(Rectangle rect)
     {
         _rect = rect;
+        NotifyPropertyChanged(nameof(Rect));
     }
 
     public void SetFrameTime(int frameTime)
     {
         _frameTime = frameTime;
+        NotifyPropertyChanged(nameof(FrameTime));
+    }
+
+    private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 

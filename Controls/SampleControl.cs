@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Forms.NET.Controls;
 using WinFormsApp1;
-using WinFormsApp1.Data;
+using WinFormsApp1.Objects;
 using WinFormsApp1.Parsers;
 using Color = Microsoft.Xna.Framework.Color;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
@@ -32,17 +32,17 @@ namespace Editor.Controls
         private bool setCameraFirstPosition = false;
 
         
-        private List<Animation> _animations = new List<Animation>();
+        public BindingList<Animation> Animations = new BindingList<Animation>();
         public int SelectedAnimationIndex = -1;
         public int SelectedFrameIndex = -1;
         
-        private List<Tuple<string, Texture2D>> _textures = new List<Tuple<string, Texture2D>>();
+        private BindingList<Tuple<string, Texture2D>> _textures = new BindingList<Tuple<string, Texture2D>>();
         private Dictionary<string, int> _textureIds = new Dictionary<string, int>(); // Texture Id mapping
         private int selectedTextureIndex = 0;
         private int textureId = 0;
         
-        public List<Animation> Animations => _animations;
-        public List<Tuple<string, Texture2D>> Textures => _textures;
+        //public List<Animation> Animations => Animations;
+        public BindingList<Tuple<string, Texture2D>> Textures => _textures;
         public Dictionary<string, int> TextureIds => _textureIds;
 
         #region Setters
@@ -87,7 +87,7 @@ namespace Editor.Controls
         {
             if (SelectedAnimationIndex < 0 || SelectedAnimationIndex > Animations.Count - 1) return;
             AnimationFrame frame = new AnimationFrame(selectedTextureIndex);
-            _animations[SelectedAnimationIndex].AddFrame(frame);
+            Animations[SelectedAnimationIndex].AddFrame(frame);
         }
 
         #endregion
@@ -96,7 +96,7 @@ namespace Editor.Controls
 
         public void SetLoad(TextParser.TextParseLoadResult result)
         {
-            _animations = result.Animations;
+            Animations = new BindingList<Animation>(result.Animations);
             foreach (var texture in result.TextureIds)
                 LoadTexture(Path.Combine(result.RootPath, texture.Key.Replace('/',  '\\')));
             
@@ -109,10 +109,10 @@ namespace Editor.Controls
 
         public void NewAnimationList()
         {
-            _animations.Clear();
+            Animations.Clear();
             Animation defaultAnimation = new Animation();
             defaultAnimation.SetName(Animation.SpriteOnlyAnimationName);
-            _animations.Add(defaultAnimation);
+            Animations.Add(defaultAnimation);
         }
         
         public SampleControl()
@@ -192,7 +192,7 @@ namespace Editor.Controls
                 Helper.DrawRectangle(Editor.spriteBatch, spriteRect, new Color(Color.Red, 0.4f), 1);
             if (SelectedAnimationIndex != -1)
             {
-                Animation anim =  _animations[SelectedAnimationIndex];
+                Animation anim =  Animations[SelectedAnimationIndex];
                 for (int i = 0; i < anim.Frames.Count; i++)
                 {
                     if (anim.Frames[i].TextureId != selectedTextureIndex) continue;
@@ -277,7 +277,7 @@ namespace Editor.Controls
                     Point texturePosition = screenCenter.ToPoint() - new Point(_texture.Width / 2, _texture.Height / 2);
                     spriteRect.X -= texturePosition.X;
                     spriteRect.Y -= texturePosition.Y;
-                    _animations[SelectedAnimationIndex].Frames[SelectedFrameIndex].SetRect(spriteRect);
+                    Animations[SelectedAnimationIndex].Frames[SelectedFrameIndex].SetRect(spriteRect);
                 }
                 spriteRect = Rectangle.Empty;
             }
