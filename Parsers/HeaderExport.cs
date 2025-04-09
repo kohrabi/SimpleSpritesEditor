@@ -39,7 +39,7 @@ public static class HeaderExport
             streamWriter.WriteLine();
 
             streamWriter.WriteLine("#define " + param.ObjectName.ToUpper() + 
-                "_SPRITES_PATH " + "L\"" + param.ContentFilePath.Remove(0, param.RootPath.Length) + "\"");
+                "_SPRITES_PATH " + "L\"" + Helper.FixPath(param.ContentFilePath.Remove(0, param.RootPath.Length)).Replace('\\', '/') + "\"");
             streamWriter.WriteLine();
 
             int id = param.StartId + 1;

@@ -156,8 +156,8 @@ public static class TextParser
                                 result.RootPath = Path.GetFullPath(tokens[1]);
                             if (tokens[0] == "startID" && tokens.Length == 2)
                                 result.StartId = int.Parse(tokens[1]);
-                            if (tokens[0] == "objectName" && tokens.Length == 2)
-                                result.ObjectName = tokens[1];
+                            if (tokens[0] == "objectName" && tokens.Length >= 2)
+                                result.ObjectName = String.Join(" ", tokens.Skip(1));
                             if (tokens[0] == "frameName" && frames.Count > 0)
                             {
                                 frames[frames.Keys.Last()].Name = String.Join(" ", tokens.Skip(1));
