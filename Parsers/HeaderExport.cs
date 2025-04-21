@@ -48,9 +48,9 @@ public static class HeaderExport
                 int frameIndex = 0;
                 foreach (var frame in animation.Frames)
                 {
-                    string outputSprites = "#define " + param.ObjectName.ToUpper() + "_ID_SPRITE_";
+                    string outputSprites = "#define " + param.ObjectName.ToUpper().Replace(" ", "_") + "_ID_SPRITE_";
                     if (animation.Name != Animation.SpriteOnlyAnimationName)
-                        outputSprites += animation.Name.ToUpper() + "_FRAME_" + frameIndex;
+                        outputSprites += animation.Name.ToUpper().Replace(" ", "_") + "_FRAME_" + frameIndex;
                     else
                         outputSprites += frame.Name.ToUpper().Replace(" ", "_");
                     outputSprites += " " + id;
